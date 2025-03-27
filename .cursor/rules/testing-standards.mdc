@@ -1,10 +1,6 @@
 ---
 description: Standards for test coverage, test-driven development, and test organization
-globs: **/*.{test,spec}.{ts,tsx,js,jsx}, **/tests/**/*
----
----
-description: Standards for test coverage, test-driven development, and test organization
-globs: ["**/*.{test,spec}.{ts,tsx,js,jsx}", "**/tests/**/*"]
+globs: ["**/*.{test,spec}.{ts,tsx,js,jsx}", "**/tests/**/*", "**/__tests__/**/*"]
 ---
 
 # Testing Standards
@@ -95,16 +91,23 @@ This document defines the testing standards and practices for this project, focu
 1. **File Organization**
    - Mirror source file structure in test files
    - Name test files with `.test.ts` or `.spec.ts` suffix
+   - Place tests in `__tests__` directories adjacent to the code being tested
    - Group related tests in describe blocks
    - Use nested describe blocks for subtopics
 
-2. **Test Naming**
+2. **Directory Conventions**
+   - Use a `__tests__` directory within each module/component directory to contain its tests
+   - For each source file, create a corresponding test file in the `__tests__` directory
+   - Example: For `src/consensus/methods.ts`, create `src/consensus/__tests__/methods.test.ts`
+   - Keep test utilities and mocks in a `__mocks__` directory at the same level
+
+3. **Test Naming**
    - Use descriptive test names following "should <expected behavior> when <condition>" format
    - Keep test descriptions focused on business requirements
    - Avoid technical jargon in test descriptions
    - Use consistent naming patterns across test files
 
-3. **Example Structure**
+4. **Example Structure**
 
 ```typescript
 describe('Bullishness Calculation', () => {
@@ -131,6 +134,34 @@ describe('Bullishness Calculation', () => {
   });
 });
 ```
+
+## Handling Test Failures
+
+1. **Investigative Process**
+   - When tests fail, start by understanding why the test is failing
+   - Explain to the user the precise reason for the failure, providing context from both the test and implementation
+   - Ask the user clarifying questions to determine whether the test or the implementation needs to be updated
+
+2. **Decision Guidance**
+   - If the test expectations don't match implementation behavior, explicitly ask:
+     - Should the test be updated to match the current implementation?
+     - Should the implementation be modified to meet the test's expectations?
+   - Look for clues in documentation, comments, and business logic to determine the intended behavior
+
+3. **Documentation Update**
+   - When updating either the test or implementation, document the reasoning
+   - Add comments to either the tests or code to explain any non-obvious behaviors
+   - Update any related documentation to reflect the decision
+
+4. **Example Dialog**
+   ```
+   Test expecting supermajority consensus at 2/3 threshold is failing because the implementation uses a 75% threshold.
+   
+   Questions to resolve:
+   1. What is the intended definition of "supermajority" for this project?
+   2. Should we modify the implementation to consider 2/3 as the threshold?
+   3. Or should we update the test to expect consensus only at 75% agreement?
+   ```
 
 ## Testing Tools and Utilities
 

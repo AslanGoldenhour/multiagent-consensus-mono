@@ -5,5 +5,9 @@ set -e
 echo "🔎 Running linters and formatters..."
 npx lint-staged
 
+# Run tests to ensure there are no regressions
+echo "🧪 Running tests..."
+npm test
+
 # If we got this far, everything passed
 echo "✅ Pre-commit checks passed! Proceeding with commit..." 

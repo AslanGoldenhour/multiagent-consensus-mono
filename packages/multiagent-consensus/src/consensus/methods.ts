@@ -49,7 +49,7 @@ const majorityConsensus: ConsensusMethodFunction = responses => {
 };
 
 /**
- * Supermajority consensus method (2/3 agreement)
+ * Supermajority consensus method (75% agreement)
  * @param responses Array of model responses
  * @returns Consensus result
  */
@@ -75,8 +75,8 @@ const supermajorityConsensus: ConsensusMethodFunction = responses => {
     }
   });
 
-  // Calculate if supermajority threshold is met (2/3 or more)
-  const consensusReached = maxCount >= (responses.length * 2) / 3;
+  // Calculate if supermajority threshold is met (75% or more)
+  const consensusReached = maxCount >= responses.length * 0.75;
 
   return {
     consensusReached,
