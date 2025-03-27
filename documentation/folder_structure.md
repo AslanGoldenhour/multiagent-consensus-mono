@@ -1,4 +1,4 @@
-# Monorepo Structure
+# Monorepo Structure: Multiagent Consensus
 
 This document outlines the folder structure and organization for this monorepo.
 

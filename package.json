@@ -1,8 +1,8 @@
 {
-  "name": "multiagent-mono",
+  "name": "multiagent-consensus-mono",
   "version": "0.1.0",
   "private": true,
-  "description": "A monorepo for multi-agent systems",
+  "description": "A monorepo for multi-agent consensus systems",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/multiagent-mono.git"
+    "url": "git+https://github.com/aslangoldenhour/multiagent-consensus-mono.git"
   },
   "keywords": [
     "monorepo",

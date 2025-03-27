@@ -1,6 +1,6 @@
-# Project Plan: Multi-Agent Systems Implementation Checklist
+# Project Plan: Multi-Agent Consensus Systems Implementation Checklist
 
-This document provides a comprehensive phased implementation plan for the multiagent-mono repository, tracking tasks from initial setup through completion.
+This document provides a comprehensive phased implementation plan for the multiagent-consensus-mono repository, tracking tasks from initial setup through completion.
 
 ## Phase 1: Environment Setup and Repository Configuration
 

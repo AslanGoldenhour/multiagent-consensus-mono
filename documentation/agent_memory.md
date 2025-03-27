@@ -1,8 +1,8 @@
-# Agent Memory: Multiagent-Mono Repository
+# Agent Memory: Multiagent-Consensus-Mono Repository
 
 ## Project Overview
 
-This repository is a monorepo structure for developing and managing multi-agent systems. It follows code quality standards with automated linting and formatting on commit.
+This repository is a monorepo structure for developing and managing multi-agent consensus systems. It follows code quality standards with automated linting and formatting on commit.
 
 ## Technical Memory
 
@@ -93,12 +93,13 @@ The web application is built with:
 
 | Date       | Changes                    | Details                                                                                                                     |
 | ---------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| 2025-03-27 | Repository Initialization  | Created the multiagent-mono repository with initial structure, README.md, and .gitignore                                    |
+| 2025-03-27 | Repository Initialization  | Created the multiagent-consensus-mono repository with initial structure, README.md, and .gitignore                          |
 | 2025-03-27 | Code Quality Tools Setup   | Added Husky, ESLint, Prettier, and TypeScript configuration with pre-commit hooks for automated code formatting and linting |
 | 2025-03-27 | Consensus Package Creation | Created the basic structure for the multiagent-consensus package with types, interfaces, and initial implementation         |
 | 2025-03-27 | Next.js App Creation       | Set up a Next.js web application with TypeScript, Tailwind CSS, and ESLint                                                  |
 | 2025-03-27 | Documentation Updates      | Created comprehensive folder structure documentation and phased implementation checklist                                    |
 | 2025-03-27 | Configuration Conflict Fix | Resolved ESLint and PostCSS configuration conflicts in the monorepo setup, switched to ESLint v8                            |
+| 2025-03-27 | Repository Rename          | Renamed repository from multiagent-mono to multiagent-consensus-mono to better reflect its purpose                          |
 
 ## Future Considerations
 

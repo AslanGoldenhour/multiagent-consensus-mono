@@ -1,6 +1,6 @@
-# Multiagent Monorepo
+# Multiagent Consensus Monorepo
 
-A comprehensive monorepo structure for developing and managing multi-agent systems, with a focus on consensus mechanisms for LLMs.
+A comprehensive monorepo structure for developing and managing multi-agent consensus systems, with a focus on consensus mechanisms for LLMs.
 
 ## 📋 Overview
 
@@ -34,8 +34,8 @@ This monorepo contains packages and applications for building multi-agent system
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/multiagent-mono.git
-cd multiagent-mono
+git clone https://github.com/yourusername/multiagent-consensus-mono.git
+cd multiagent-consensus-mono
 ```
 
 2. Install dependencies:
