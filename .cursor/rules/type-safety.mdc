@@ -1,0 +1,109 @@
+---
+description: Guidelines for maintaining type safety and proper TypeScript usage
+globs: **/*.{ts,tsx}
+---
+---
+description: Guidelines for maintaining type safety and proper TypeScript usage
+globs: ["**/*.{ts,tsx}"]
+---
+
+# TypeScript and Type Safety Standards
+
+This document defines the standards and best practices for using TypeScript in this project to ensure type safety, maintainability, and proper error handling.
+
+## Type Definition Requirements
+
+1. **Explicit Typing**
+   - All functions must have explicit return types
+   - All function parameters must be explicitly typed
+   - All variables with non-obvious types must have type annotations
+   - Avoid using `any` type except in test files
+
+2. **Interface and Type Definitions**
+   - Define interfaces for all data models following algorithm-implementation-guide.md
+   - Use interfaces for object shapes that represent entities
+   - Use type aliases for unions, intersections, and simpler types
+   - Document interfaces and types with JSDoc comments
+
+3. **Type Organization**
+   - Place shared types in the types package
+   - Keep domain-specific types close to their usage
+   - Export types from barrel files (index.ts) for easier imports
+   - Group related types together
+
+## Nullable and Optional Handling
+
+1. **Null Safety**
+   - Use undefined instead of null when possible
+   - Explicitly handle all nullable values with type guards
+   - Use optional chaining (?.) and nullish coalescing (??) operators
+   - Never use non-null assertion operator (!) unless truly unavoidable
+
+2. **Optional Properties**
+   - Use optional properties (prop?: Type) instead of union types (prop: Type | undefined)
+   - Provide sensible defaults for optional parameters
+   - Document when properties can be optional and what that means
+   - Use the Required<T> and Partial<T> utility types appropriately
+
+3. **Type Guards**
+   - Implement custom type guards for complex type narrowing
+   - Use exhaustive checks for union types (with never type)
+   - Create helper functions for common type guard patterns
+   - Add descriptive error messages for type guard failures
+
+## Generic Types
+
+1. **When to Use Generics**
+   - For functions that operate on collections of arbitrary types
+   - For components that can render different data types
+   - For utility functions that preserve input types
+   - When creating reusable type-safe containers
+
+2. **Constraints and Defaults**
+   - Use constraints to restrict generic types when needed (`<T extends BaseType>`)
+   - Provide sensible defaults for generic parameters (`<T = DefaultType>`)
+   - Use multiple generic parameters to avoid any type
+   - Document the purpose and constraints of each generic parameter
+
+3. **Generic Naming**
+   - Use descriptive names for generic parameters (e.g., TItem instead of T)
+   - Use T, U, V for simple transformations or mappings
+   - Use TInput/TOutput for functions that transform types
+   - Use TProps, TState for component-related generics
+
+## TypeScript Configuration
+
+1. **Compiler Options**
+   - Enable strict mode for all TypeScript projects
+   - Set noImplicitAny to true
+   - Enable strictNullChecks
+   - Configure paths for clean imports
+   - Use project references for large codebases
+
+2. **Type Declarations**
+   - Create declaration files for external APIs
+   - Document third-party module augmentations
+   - Maintain up-to-date @types dependencies
+   - Add module declarations for non-TypeScript assets
+
+## Advanced Type Features
+
+1. **Utility Types**
+   - Use built-in utility types (Pick, Omit, Partial, Required, etc.)
+   - Create custom mapped types for repetitive patterns
+   - Use template literal types for string unions
+   - Leverage conditional types for complex type logic
+
+2. **Type Assertions**
+   - Avoid type assertions (as Type) when possible
+   - Use type guards instead of type assertions
+   - When necessary, document why a type assertion is safe
+   - Consider creating custom assertion functions with runtime checks
+
+3. **Never Type**
+   - Use the never type for exhaustive checks
+   - Handle impossible cases explicitly
+   - Document when a function should never return
+   - Use never for unreachable code branches
+
+Remember: Strong typing is not just for the compiler—it serves as documentation and helps prevent bugs. Always prefer explicit types over inference when the types add clarity.

@@ -1,0 +1,130 @@
+---
+description: Save agent memory to long-term storage
+globs: **/agent_memory.md
+---
+---
+description: Rules for maintaining agent memory across multiple sessions
+globs: ["**/agent_memory.md"]
+---
+
+# Agent Memory Management Rules
+
+This document defines how Claude should interact with, maintain, and leverage the agent_memory.md file throughout this project's development cycle.
+
+## Memory Lifecycle Rules
+
+1. **Session Initialization**
+   - Start each new session by reading the complete agent_memory.md file
+   - Acknowledge the current project state in your first response
+   - Reference at least 2-3 key points from the Technical Memory section
+   - Identify which Implementation Progress items are active
+
+2. **In-Session Memory Utilization**
+   - Reference the memory file when making architectural decisions
+   - Maintain consistency with previously documented approaches
+   - Cite specific sections of the memory when explaining technical choices
+   - Apply all established coding standards as defined in the Cursor rules
+
+3. **Memory Updating Protocol**
+   - Update agent_memory.md at the end of each productive session
+   - ALWAYS use the terminal command `date +"%Y-%m-%d"` to get the current date before adding new entries
+   - Use the accurate date from the terminal command for all new session entries
+   - Format the Session Log as a table with columns for Date, Changes, and Details
+   - NEVER delete or overwrite previous session entries - all history must be preserved indefinitely
+   - After completing any implementation checklist item, record it in the Progress Snapshot
+   - Document any new technical decisions in the appropriate Technical Memory section
+   - Add a new entry to the Session Log with a summary of accomplishments
+   - Record any deviations from the standards defined in the Cursor rules
+   - When updating the Session Log, create a new table row with today's date and detailed changes
+   - Include links to relevant commits or PRs in the session log when available
+
+4. **Memory Conflict Resolution**
+   - If current user instructions conflict with recorded memory, seek clarification
+   - When approaches change, update the Technical Memory section with both the new approach and the reasoning for the change
+   - Maintain a history of significant pivots in strategy as comments in the respective sections
+   - When standards evolve, document the changes and rationale
+
+## Access Patterns
+
+1. **When to Reference Memory**
+   - At the start of each new conversation
+   - When implementing complex features that span multiple sessions
+   - When making decisions about architecture or technical approach
+   - When the user asks about project status or progress
+   - When applying coding standards from the Cursor rules
+
+2. **When to Update Memory**
+   - After completing significant implementation milestones
+   - When making important architectural decisions
+   - When changing approaches or pivoting strategy
+   - At the user's explicit request
+   - At the end of productive development sessions
+   - After merging branches
+   - After a user says to continue processing
+
+3. **What to Prioritize in Memory**
+   - Implementation details that would be difficult to infer from code alone
+   - Reasoning behind architectural decisions
+   - Current status of complex, multi-stage features
+   - Known issues and planned solutions
+   - External dependencies and integration details
+   - Exceptions to coding standards and their justifications
+
+## Integration with Development Workflow
+
+1. **Code Generation**
+   - Reference memory before generating code to ensure consistency
+   - Implement features according to the recorded architectural decisions
+   - Follow all coding standards defined in the project's Cursor rules
+   - Use UI patterns consistent with those documented in memory
+
+2. **Documentation**
+   - Ensure all generated documentation aligns with the project overview in memory
+   - Maintain consistent terminology as defined in the memory file
+   - Reference technical decisions recorded in memory when explaining implementation details
+   - Follow documentation standards defined in documentation-standards.mdc
+
+3. **Testing**
+   - Implement tests that validate the key features described in memory
+   - Prioritize testing the critical paths identified in the Implementation Progress
+   - Follow test-driven development practices as defined in testing-standards.mdc
+   - Ensure proper test coverage as specified in the testing standards
+
+## User Interaction Rules
+
+1. **Transparency**
+   - When referencing memory, be explicit about it
+   - When updating memory, summarize the changes being made
+   - If memory seems outdated or contradictory, flag this to the user
+   - When applying standards from Cursor rules, cite the relevant rule
+
+2. **Proactive Memory Management**
+   - Suggest memory updates when significant progress is made
+   - Recommend refining memory content when sections become verbose or outdated
+   - Offer to add new sections to memory when new categories of information emerge
+   - Propose updates to Cursor rules when patterns emerge that aren't covered by existing rules
+
+3. **Continuity Maintenance**
+   - Begin each session with a brief acknowledgment of where the previous session ended
+   - Maintain the same mental model of the project architecture across sessions
+   - Ensure implementation approaches remain consistent unless explicitly changed
+   - Apply coding standards consistently across sessions
+
+## Memory and Code Quality Integration
+
+1. **Code Organization**
+   - Apply function length, file size, and component complexity standards from code-organization.mdc
+   - Document in memory when files are split or refactored for organization purposes
+   - Track the evolving directory structure in the Technical Memory section
+
+2. **Error Handling**
+   - Follow error handling patterns defined in error-handling.mdc
+   - Document common error scenarios and recovery strategies in memory
+   - Record specific error handling decisions for complex operations
+
+3. **Performance Optimization**
+   - Apply algorithm efficiency standards from performance-standards.mdc
+   - Document performance characteristics and optimization strategies in memory
+   - Track performance improvements and their impacts
+
+Remember: The agent_memory.md file is the single source of truth for project state, technical decisions, and implementation progress. Always defer to it for continuity between sessions, and diligently maintain it to ensure an efficient development process.

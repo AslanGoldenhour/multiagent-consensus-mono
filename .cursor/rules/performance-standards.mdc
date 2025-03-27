@@ -1,0 +1,126 @@
+---
+description: Standards for algorithm efficiency, performance optimization, and resource management
+globs: **/*.{ts,tsx,js,jsx}
+---
+---
+description: Standards for algorithm efficiency, performance optimization, and resource management
+globs: ["**/*.{ts,tsx,js,jsx}"]
+---
+
+# Performance Standards
+
+This document defines performance standards and optimization practices for this project, with special emphasis on algorithm efficiency and React application performance.
+
+## Algorithm Efficiency
+
+1. **Complexity Requirements**
+   - Document time and space complexity for all algorithm functions
+   - Aim for O(n) or better complexity for core algorithm operations
+   - Functions with O(n²) or worse complexity must include a justification comment
+   - Consider algorithmic tradeoffs (time vs. space complexity) based on expected data size
+
+2. **Data Structure Selection**
+   - Choose appropriate data structures based on required operations
+   - Use Map and Set objects for O(1) lookups
+   - Use arrays only when indexing or iteration is required
+   - Consider specialized data structures for graph operations
+
+3. **Iteration Optimization**
+   - Use early termination in loops when possible
+   - Avoid nested loops when alternative approaches exist
+   - Consider chunking for operations on large datasets
+   - Use generator functions for processing large sequences incrementally
+
+4. **Memory Management**
+   - Minimize object creation in performance-critical paths
+   - Reuse objects and arrays when appropriate
+   - Be mindful of closure memory implications
+   - Consider typed arrays for numerical operations
+
+## Memoization and Caching
+
+1. **Function Memoization**
+   - Memoize pure functions that are called repeatedly with the same arguments
+   - Implement custom memoization for functions with complex arguments
+   - Use WeakMap for object key memoization to avoid memory leaks
+   - Document cache invalidation strategies
+
+2. **React-Specific Memoization**
+   - Use React.memo for components that render frequently with the same props
+   - Implement useMemo for expensive calculations
+   - Use useCallback for functions passed as props
+   - Ensure dependency arrays are complete and minimal
+
+3. **Cache Limitations**
+   - Set appropriate cache sizes based on expected usage patterns
+   - Implement LRU (Least Recently Used) caching for large datasets
+   - Clear caches when no longer needed
+   - Document cache behavior and limitations
+
+## Algorithm-Specific Optimizations
+
+1. **Graph Algorithm Optimization**
+   - Use appropriate data structures for sparse graphs
+   - Consider adjacency lists instead of matrices for sparse connections
+   - Implement early stopping in iterative algorithms when convergence is detected
+   - Optimize edge weight normalization operations
+
+2. **Numerical Computation**
+   - Use appropriate numerical precision
+   - Consider fixed-point arithmetic when applicable
+   - Implement numerical stability improvements for iterative calculations
+   - Cache intermediate results in multi-step calculations
+
+3. **Convergence Optimization**
+   - Implement adaptive convergence thresholds
+   - Use exponential backoff for iteration steps
+   - Track convergence metrics for performance analysis
+   - Add maximum iteration caps with warnings
+
+## React Performance
+
+1. **Rendering Optimization**
+   - Avoid unnecessary re-renders
+   - Use React.memo and PureComponent appropriately
+   - Optimize lists with virtualization
+   - Split large components into smaller, focused ones
+
+2. **State Management**
+   - Keep state as local as possible
+   - Use appropriate state management based on complexity
+   - Normalize complex state objects
+   - Avoid redundant state
+
+3. **Effect Optimization**
+   - Minimize effect dependencies
+   - Use cleanup functions in useEffect hooks
+   - Split effects by concern
+   - Debounce rapidly changing values
+
+4. **React Query Patterns**
+   - Implement appropriate caching strategies
+   - Use stale-while-revalidate pattern
+   - Implement optimistic updates
+   - Configure proper retry and error handling
+
+## Measurement and Monitoring
+
+1. **Performance Testing**
+   - Implement benchmarks for critical algorithms
+   - Measure render times for complex components
+   - Test with realistic dataset sizes
+   - Compare performance across browser environments
+
+2. **Profiling**
+   - Use Chrome DevTools for performance profiling
+   - Add performance marks and measures for critical operations
+   - Profile memory usage for long-running processes
+   - Document performance characteristics and limitations
+
+3. **Performance Budgets**
+   - Set maximum execution time targets for key operations
+   - Define bundle size limits
+   - Monitor render times for critical components
+   - Establish memory usage guidelines
+
+Remember: Premature optimization can lead to unnecessary complexity. Focus optimization efforts on proven bottlenecks identified through measurement rather than speculative improvements.

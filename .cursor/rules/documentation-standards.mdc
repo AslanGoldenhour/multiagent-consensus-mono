@@ -1,0 +1,204 @@
+---
+description: Standards for code documentation, comments, and documentation structure
+globs: ["**/*.{ts,tsx,js,jsx}"]
+---
+
+# Documentation Standards
+
+This document defines standards for code documentation in this project, including JSDoc comments, inline comments, and documentation organization.
+
+## JSDoc Requirements
+
+1. **Function Documentation**
+   - All public functions must have JSDoc comments
+   - Document purpose, parameters, return values, and thrown errors
+   - Include examples for complex functions
+   - Document side effects and mutations
+
+   ```typescript
+   /**
+    * Calculates bullishness scores for companies based on employee ratings
+    * 
+    * @param companies - List of companies to calculate scores for
+    * @param employees - List of employees with their company affiliations
+    * @param bullishnessVotes - List of bullishness ratings from employees
+    * @param config - Algorithm configuration options
+    * @returns Map of company IDs to normalized bullishness scores (0-1)
+    * @throws {InvalidDataError} If input data doesn't meet validation criteria
+    * 
+    * @example
+    * const scores = calculateBullishness(companies, employees, votes, defaultConfig);
+    */
+   function calculateBullishness(
+     companies: Company[],
+     employees: Employee[],
+     bullishnessVotes: BullishnessVote[],
+     config: AlgorithmConfig
+   ): Map<string, number> {
+     // Implementation
+   }
+   ```
+
+2. **Interface and Type Documentation**
+   - Document each interface and type with JSDoc
+   - Explain the purpose and usage context
+   - Document each property with a description
+   - Include constraints and validation rules
+
+   ```typescript
+   /**
+    * Configuration options for the ranking algorithm
+    * Controls convergence parameters and weighting strategies
+    */
+   interface AlgorithmConfig {
+     /** 
+      * Damping factor for the PageRank-inspired algorithm (0-1)
+      * Higher values give more weight to the graph structure
+      * @default 0.85
+      */
+     dampingFactor: number;
+     
+     /** 
+      * Threshold for convergence detection
+      * Algorithm stops when the change between iterations is below this value
+      * @default 0.0001
+      */
+     convergenceThreshold: number;
+     
+     // Other properties...
+   }
+   ```
+
+3. **Class Documentation**
+   - Document class purpose and responsibilities
+   - Document constructor parameters
+   - Document public methods and properties
+   - Include usage examples for complex classes
+
+## Inline Comments
+
+1. **When to Use Comments**
+   - Document non-obvious code behavior
+   - Explain complex algorithms step by step
+   - Document workarounds or temporary solutions
+   - Explain design decisions that might not be immediately clear
+
+2. **Comment Style**
+   - Use complete sentences with proper punctuation
+   - Keep comments concise and focused
+   - Update comments when code changes
+   - Remove commented-out code before committing
+
+3. **Algorithm Comments**
+   - Break complex algorithms into logical sections with comments
+   - Include mathematical notation where appropriate
+   - Reference academic papers or external sources if used
+   - Document edge cases and special handling
+
+   ```typescript
+   // Step 1: Initialize scores uniformly
+   companies.forEach(company => {
+     scores.set(company.id, 1 / companies.length);
+   });
+   
+   // Step 2: Perform iterative update until convergence
+   while (!converged && iterations < config.maxIterations) {
+     // ...algorithm implementation...
+     
+     // Check for convergence using L1 norm
+     const delta = calculateDelta(prevScores, scores);
+     converged = delta < config.convergenceThreshold;
+   }
+   ```
+
+## TODO Comments
+
+1. **TODO Format**
+   - Include a reference to a ticket number or identifier
+   - Explain what needs to be done and why
+   - Include priority or timeline if applicable
+   - Sign with author initials or username
+
+   ```typescript
+   // TODO(BACK-123): Implement outlier detection for extreme ratings
+   // This is needed to handle potential gaming of the system
+   // Priority: Medium, Target: Sprint 3
+   // @jsmith
+   ```
+
+2. **Management**
+   - Regularly review TODO comments
+   - Convert TODOs to tickets in the project management system
+   - Remove TODOs when the work is completed
+   - Never commit WIP code with TODOs for critical functionality
+
+## Documentation Organization
+
+1. **File-Level Documentation**
+   - Include a file header with purpose description
+   - List primary exports and their purposes
+   - Document file dependencies and relationships
+   - Include copyright and license information if applicable
+
+   ```typescript
+   /**
+    * @file Graph Construction Module
+    * 
+    * Builds the company admiration graph for the ranking algorithm
+    * based on employee admiration votes. Creates a directed graph
+    * with weighted edges that will be used in the PageRank-inspired
+    * algorithm.
+    * 
+    * Primary exports:
+    * - buildAdmirationGraph: Constructs the directed graph
+    * - GraphNode/GraphEdge: Types for the graph structure
+    */
+   ```
+
+2. **Directory Documentation**
+   - Include a README.md in each directory explaining its purpose
+   - Document relationships between files in the directory
+   - Explain architectural decisions specific to the module
+   - Include simple examples for using the module
+
+3. **Documentation Grouping**
+   - Group related functions, types, and interfaces in documentation
+   - Use consistent organization across similar modules
+   - Document public APIs separately from internal implementations
+   - Maintain separation of concerns in documentation
+
+## UI Feedback Standards
+
+1. **Toast Notifications**
+   - Use toast notifications for any action that materially changes data
+   - Provide clear, concise messages about the outcome of user actions
+   - Use appropriate toast types based on the outcome:
+     - `success`: For successful operations (e.g., "Company added successfully")
+     - `error`: For failed operations (e.g., "Failed to delete employee")
+     - `info`: For informational updates (e.g., "Configuration updated")
+     - `warning`: For potentially risky operations (e.g., "This will reset all votes")
+   - Keep toast messages concise (under 80 characters)
+   - Include specific details when appropriate (e.g., "Employee John Doe added to Acme Inc.")
+   - Use consistent terminology across similar operations
+
+   ```typescript
+   // Example toast usage
+   import { useToast } from '@/components/toast/ToastContext';
+   
+   // In your component:
+   const { addToast } = useToast();
+   
+   // When user action succeeds:
+   addToast(`Company "${company.name}" created successfully`, 'success');
+   
+   // When user action fails:
+   addToast(`Failed to update employee: ${error.message}`, 'error');
+   ```
+
+2. **Loading States**
+   - Provide visual feedback for operations that take time to complete
+   - Use consistent loading indicators across the application
+   - Include appropriate text with loading indicators to explain what's happening
+   - Always provide a way to cancel long-running operations when possible
+
+Remember: Good documentation explains the "why" behind code decisions, not just the "what" or "how." Focus on capturing intent and reasoning that may not be apparent from the code alone. Similarly, good user interface feedback builds trust with users by keeping them informed about the state of their interactions with the system. 

@@ -1,0 +1,37 @@
+---
+description: Rules for documentation update workflow and sequence
+globs: ["**/*.md"]
+---
+
+# Documentation Workflow Rules
+
+## Update Sequence
+
+When working with documentation, always follow this sequence:
+
+1. First update `instructions/agent_memory.md` with technical details
+2. Then update `instructions/project_plan.md` to mark tasks complete
+3. Finally update `README.md` with user-facing changes and metrics
+
+## Documentation Content
+
+Ensure each documentation file maintains its purpose:
+
+- **Agent Memory**: Technical details, decisions, and implementation notes
+- **Project Plan**: Task tracking, progress updates, and roadmap
+- **README**: User-facing overview, metrics, and status badges
+
+## Metrics Updates
+
+Before updating the README with badges or metrics:
+
+1. Run tests to get current coverage: `cd packages/multiagent-discussion && pnpm test`
+2. Count source lines of code: `find packages -type f -name "*.ts" | xargs wc -l | sort -nr`
+3. Update badges to reflect current values
+
+## Commit Guidelines
+
+Use clear commit messages for documentation updates:
+- "Update agent memory with [feature] implementation details"
+- "Update project plan to mark [feature] as completed"
+- "Update README with current metrics and status" 

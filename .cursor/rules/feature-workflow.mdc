@@ -1,0 +1,123 @@
+---
+description: How to Build Features
+globs: 
+---
+
+# Feature Development Workflow
+
+This document outlines the workflow for developing and implementing new features in our codebase.
+
+## Standard Workflow
+
+When adding a new feature or fix to the application, follow these steps:
+
+1. **Create a New Branch**
+   - Start by creating a new branch from `main`
+   - Use a descriptive name that reflects the feature being implemented
+   - Example: `feature/document-preview` or `fix/user-authentication`
+
+2. **Run Existing Tests**
+   - Run the entire test suite to ensure all existing tests pass
+   - Fix any failing tests in a new branch before proceeding
+   - This establishes a clean baseline for development
+
+3. **Write Comprehensive Tests First**
+   - Following test-driven development principles as defined in testing-standards.mdc
+   - Create unit tests for individual components
+   - Add integration tests where components interact
+   - Create end-to-end tests to verify the complete feature workflow
+   - Run the test suite to confirm the new tests fail (since feature is not yet implemented)
+
+4. **Implement the Feature**
+   - Develop the feature according to specifications
+   - Follow code organization standards from code-organization.mdc
+   - Apply type safety standards from type-safety.mdc
+   - Implement proper error handling as defined in error-handling.mdc
+   - Document code according to documentation-standards.mdc
+   - Apply performance best practices from performance-standards.mdc
+   - Implement the minimum code necessary to make tests pass
+   - Regularly commit changes with descriptive commit messages
+
+5. **Verify Tests Pass**
+   - Run all tests to confirm they now pass
+   - If tests still fail, revise implementation until tests pass
+   - Refactor code for clarity and efficiency while maintaining passing tests
+
+6. **Quality Assurance**
+   - Ensure no linting errors are present
+   - Verify code satisfies all Cursor rule standards
+   - Review code for potential improvements or optimizations
+   - Verify the feature functions as expected across different environments
+
+7. **Documentation Update**
+   - Update the README.md file if necessary
+   - Update any relevant files in the `instructions` folder
+   - Update PRD documentation
+   - Ensure all appropriate checklists are checked off
+   - Update the [agent_memory.md](mdc:instructions/agent_memory.md) file with a longform narrative explanation that describes the recently completed work
+
+8. **Code Commit Process**
+   - Always run tests before committing: `pnpm test`
+   - Check for linting errors before committing: `pnpm lint`
+   - Commit code with clear, descriptive messages
+   - Make multiple small, focused commits rather than one large commit
+
+9. **Merge and Cleanup**
+   - Create a pull request to merge your branch into `main`
+   - Address any review comments or feedback
+   - After approval, merge the branch back to `main`
+   - Delete the feature branch after successful merge
+
+## Code Quality Checkpoints
+
+Before proceeding to the next workflow step, verify the following standards:
+
+1. **Code Organization**
+   - Functions remain under 30 lines of code
+   - Files remain under 300 lines of code
+   - Components remain under 150 lines
+   - Directory structure matches folder-structure.md
+
+2. **Testing Standards**
+   - Algorithm code has 100% test coverage
+   - Application code has at least 80% test coverage
+   - Edge cases are explicitly tested
+   - Test naming follows the standards
+
+3. **Type Safety**
+   - All functions have explicit return types
+   - All parameters are typed
+   - No `any` types except in tests
+   - Nullable values are properly handled
+
+4. **Documentation**
+   - All public functions have JSDoc comments
+   - Complex algorithms have step-by-step comments
+   - TODOs include ticket references
+   - Files have header documentation
+
+5. **Error Handling**
+   - Custom error types are used appropriately
+   - Input validation is implemented
+   - Error propagation is consistent
+   - Edge cases are handled properly
+
+## Pre-Commit Checklist
+
+Before committing code, ensure:
+
+- [ ] All tests are passing
+- [ ] No linting errors are present
+- [ ] Code meets all standards defined in the Cursor rules
+- [ ] Code is properly documented
+- [ ] Feature requirements are met
+- [ ] Any necessary documentation has been updated
+- [ ] [agent_memory.md](mdc:instructions/agent_memory.md) has been updated
+
+## Additional Guidelines
+
+- Commit early, commit often
+- Keep feature branches short-lived
+- Regularly pull changes from the main branch to avoid merge conflicts
+- Ensure the feature is properly tested in all supported environments
+- When in doubt, ask for a code review from team members 

@@ -1,0 +1,27 @@
+{
+  "name": "multiagent-mono",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A monorepo for multi-agent systems",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/multiagent-mono.git"
+  },
+  "keywords": [
+    "monorepo",
+    "multi-agent",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT"
+} 

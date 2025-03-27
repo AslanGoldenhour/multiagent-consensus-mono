@@ -1,0 +1,90 @@
+---
+description: Rules for maintaining clean, readable code structure
+globs: **/*.{ts,tsx,js,jsx}
+---
+---
+description: Rules for maintaining clean, readable code structure
+globs: ["**/*.{ts,tsx,js,jsx}"]
+---
+
+# Code Organization Standards
+
+This document defines rules and best practices for structuring code in this project to ensure maintainability, readability, and scalability.
+
+## Size Limits
+
+1. **Function Length**
+   - Maximum function length: 30 lines of code (excluding comments and blank lines)
+   - Complex functions exceeding this limit should be decomposed into smaller, focused helper functions
+   - Each function should have a single responsibility and clear purpose
+
+2. **File Size**
+   - Maximum file size: 300 lines of code
+   - Files approaching this limit should be split into multiple smaller files with clear responsibilities
+   - Use domain-driven or feature-based organization for file splitting
+
+3. **Component Complexity**
+   - React components should not exceed 150 lines
+   - Components with multiple responsibilities should be broken down into smaller, focused components
+   - Business logic should be extracted into custom hooks and utility functions
+
+## Structure Guidelines
+
+1. **Directory Organization**
+   - Follow the directory structure outlined in the folder-structure.md document
+   - Group related files together based on feature or domain
+   - Use consistent naming patterns within directories
+
+2. **Module Organization**
+   - Order imports by: external libraries, internal modules, types, styles
+   - Group related constants and helper functions at the top of files
+   - Place exports at the bottom of the file
+
+3. **Component Structure**
+   - Define props interface at the top of component files
+   - Order component internals: hooks, derived state, handlers, effects, render
+   - Extract complex JSX into smaller component functions
+
+## Naming Conventions
+
+1. **General Rules**
+   - Use descriptive names that reveal intention
+   - Avoid abbreviations except for widely understood ones (e.g., API, URL)
+   - Be consistent with casing conventions
+
+2. **Specific Conventions**
+   - Files: PascalCase for components, camelCase for others
+   - Functions: camelCase with verb prefixes (e.g., calculateBullishness, buildGraph)
+   - Variables: camelCase with descriptive nouns
+   - Constants: UPPER_SNAKE_CASE for true constants
+   - Types/Interfaces: PascalCase
+
+## Code Splitting
+
+1. **When to Split Code**
+   - When a function has more than one responsibility
+   - When a file contains multiple unrelated functions
+   - When a component handles multiple concerns
+   - When test files cover multiple test categories
+
+2. **How to Split Code**
+   - Extract reusable utilities to separate files
+   - Move domain-specific logic to domain-specific modules
+   - Create specialized hooks for complex state management
+   - Break complex components into container/presentation pairs
+
+## Anti-Patterns to Avoid
+
+1. **Complexity Issues**
+   - Deeply nested conditional logic (>3 levels)
+   - Functions with too many parameters (>4)
+   - Excessively long ternary expressions
+   - Nested callback functions beyond 2 levels
+
+2. **Structure Issues**
+   - Circular dependencies between modules
+   - Inconsistent file organization across similar features
+   - Mixing business logic and presentation in components
+   - Functions that modify their parameters
+
+Remember: Prioritize readability and maintainability over clever or concise code. Code is read much more often than it is written.

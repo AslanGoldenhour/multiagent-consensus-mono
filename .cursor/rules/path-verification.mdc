@@ -1,0 +1,53 @@
+---
+description: Rules for verifying the current path before executing commands or creating files
+globs: **/*
+---
+---
+description: Rules for verifying the current path before executing commands or creating files
+globs: ["**/*"]
+---
+
+# Path Verification Rules
+
+## Always Check Current Directory
+
+Before executing terminal commands or creating/modifying files, **ALWAYS** check your current directory:
+
+1. Run `pwd` to verify the current working directory
+2. Only after confirming the correct location, proceed with command execution or file operations
+3. If the directory is incorrect, use `cd` to navigate to the correct location
+
+## Terminal Commands
+
+When executing terminal commands:
+
+- Verify the directory context before running ANY command
+- Use absolute paths when changing directories to avoid ambiguity
+- After changing directories, check the new location with `pwd`
+- When executing package-specific commands, make sure you're in the correct package directory
+
+## File Operations
+
+When creating or modifying files:
+
+- Always verify the full path of the file before reading/writing
+- Use the full path in your file operations
+- Double-check that new files are being created in the correct location
+- When creating configuration files or documentation, ensure they follow the project structure
+
+## When Working With Packages
+
+For package-specific operations:
+
+- Verify you're in the correct package directory (e.g., `packages/multiagent-discussion/`)
+- Check that files are created in the correct package directory
+- Package-specific commands (like `pnpm test`) should be run from the package directory
+
+## Error Recovery
+
+If you find yourself in the wrong directory:
+
+1. Use `pwd` to determine current location
+2. Use `cd /absolute/path/to/correct/directory` to navigate to the right place
+3. Verify with `pwd` that you've reached the correct location
+4. Only then proceed with your intended operations 

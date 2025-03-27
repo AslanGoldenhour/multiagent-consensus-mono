@@ -1,0 +1,194 @@
+---
+description: Standards for error handling, validation, and exception management
+globs: **/*.{ts,tsx,js,jsx}
+---
+---
+description: Standards for error handling, validation, and exception management
+globs: ["**/*.{ts,tsx,js,jsx}"]
+---
+
+# Error Handling Standards
+
+This document defines standards for handling errors, validating input, and managing exceptions in this project.
+
+## Error Types and Classification
+
+1. **Custom Error Classes**
+   - Create domain-specific error classes extending the base Error class
+   - Group errors into categories based on their nature and origin
+   - Include meaningful error codes for programmatic handling
+   - Provide user-friendly error messages
+
+   ```typescript
+   // Base error class for algorithm-related errors
+   export class AlgorithmError extends Error {
+     constructor(message: string, public code: string) {
+       super(message);
+       this.name = 'AlgorithmError';
+     }
+   }
+   
+   // Specific error types
+   export class InvalidInputError extends AlgorithmError {
+     constructor(message: string) {
+       super(message, 'INVALID_INPUT');
+     }
+   }
+   
+   export class ConvergenceError extends AlgorithmError {
+     constructor(message: string) {
+       super(message, 'CONVERGENCE_FAILURE');
+     }
+   }
+   ```
+
+2. **Error Severity Levels**
+   - Define severity levels for different types of errors:
+     - **Fatal**: Application cannot continue
+     - **Error**: Operation failed but application can continue
+     - **Warning**: Non-critical issues that should be addressed
+     - **Info**: Informational messages about unusual conditions
+   - Include severity in error objects for appropriate handling and reporting
+
+3. **Error Context**
+   - Include relevant context data with errors
+   - Add stack traces for debugging
+   - Provide suggestions for resolving the error when possible
+   - Include references to documentation or knowledge base articles
+
+## Error Handling Patterns
+
+1. **Try-Catch Blocks**
+   - Use try-catch blocks for operations that may throw exceptions
+   - Catch specific error types before generic ones
+   - Avoid empty catch blocks
+   - Re-throw or transform errors when appropriate
+
+   ```typescript
+   try {
+     const scores = calculateRanking(companies, bullishnessScores, graph, config);
+     return scores;
+   } catch (error) {
+     if (error instanceof ConvergenceError) {
+       // Handle convergence failure specifically
+       logger.warn('Ranking algorithm failed to converge', { error });
+       return fallbackScores(companies, bullishnessScores);
+     } else if (error instanceof AlgorithmError) {
+       // Handle other algorithm errors
+       logger.error('Algorithm error', { error });
+       throw new ApplicationError('Failed to calculate company rankings', { cause: error });
+     } else {
+       // Handle unexpected errors
+       logger.error('Unexpected error in ranking calculation', { error });
+       throw error;
+     }
+   }
+   ```
+
+2. **Async Error Handling**
+   - Use async/await with try-catch for asynchronous operations
+   - Handle Promise rejections explicitly
+   - Avoid mixing callback-style error handling with Promises
+   - Use Promise.all with appropriate error handling for concurrent operations
+
+3. **Error Propagation**
+   - Decide at each level whether to:
+     - Handle the error locally
+     - Transform the error to add context
+     - Propagate the error to the caller
+   - Document error propagation behavior
+   - Use error cause property (error.cause) to chain errors
+
+4. **Boundary Error Handling**
+   - Implement comprehensive error handling at system boundaries:
+     - API endpoints
+     - UI event handlers
+     - External service clients
+     - File I/O operations
+   - Translate low-level errors to domain-specific ones
+   - Provide appropriate user feedback
+
+## Input Validation
+
+1. **Validation Approach**
+   - Validate all inputs at system boundaries
+   - Use schema validation libraries (e.g., Zod) for complex objects
+   - Implement domain-specific validation rules
+   - Return descriptive validation errors
+
+   ```typescript
+   // Define schema using Zod
+   const AlgorithmConfigSchema = z.object({
+     dampingFactor: z.number().min(0).max(1),
+     convergenceThreshold: z.number().positive(),
+     maxIterations: z.number().int().positive(),
+     employeeWeightingStrategy: z.enum(['uniform', 'tenure', 'seniority', 'custom']),
+     // Additional fields...
+   });
+   
+   // Validate input
+   function validateConfig(config: unknown): AlgorithmConfig {
+     try {
+       return AlgorithmConfigSchema.parse(config);
+     } catch (error) {
+       if (error instanceof z.ZodError) {
+         throw new InvalidInputError(`Invalid algorithm configuration: ${error.message}`);
+       }
+       throw error;
+     }
+   }
+   ```
+
+2. **Validation Levels**
+   - Implement syntactic validation (type checking, range checking)
+   - Implement semantic validation (business rules, consistency checking)
+   - Validate relationships between entities
+   - Implement cross-field validations
+
+3. **Error Messages**
+   - Provide clear, actionable validation error messages
+   - Include field names in validation errors
+   - Suggest corrections when possible
+   - Group related validation errors together
+
+## Logging and Monitoring
+
+1. **Error Logging**
+   - Log all errors with appropriate context
+   - Use structured logging for machine-readable error data
+   - Include request IDs for tracking errors across services
+   - Adjust log levels based on error severity
+
+2. **Error Monitoring**
+   - Implement alerting for critical errors
+   - Track error rates and patterns
+   - Set up error grouping for easier triage
+   - Monitor performance impacts from error handling
+
+3. **User Feedback**
+   - Provide user-friendly error messages in the UI
+   - Include error references for support inquiries
+   - Offer self-help options when possible
+   - Collect additional context from users when appropriate
+
+## Defensive Programming
+
+1. **Preconditions**
+   - Check function preconditions early
+   - Fail fast when invalid conditions are detected
+   - Document preconditions in function comments
+   - Consider using assertion functions for invariants
+
+2. **Null and Undefined Handling**
+   - Check for null and undefined values explicitly
+   - Use nullish coalescing and optional chaining
+   - Provide meaningful defaults
+   - Document nullable parameters and return values
+
+3. **Graceful Degradation**
+   - Implement fallback behavior for non-critical failures
+   - Preserve partial functionality when possible
+   - Design systems to be resilient to failures
+   - Document degraded operation modes
+
+Remember: Good error handling is not just about catching exceptions—it's about designing systems that can detect, report, and recover from failures gracefully.

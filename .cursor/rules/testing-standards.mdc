@@ -1,0 +1,148 @@
+---
+description: Standards for test coverage, test-driven development, and test organization
+globs: **/*.{test,spec}.{ts,tsx,js,jsx}, **/tests/**/*
+---
+---
+description: Standards for test coverage, test-driven development, and test organization
+globs: ["**/*.{test,spec}.{ts,tsx,js,jsx}", "**/tests/**/*"]
+---
+
+# Testing Standards
+
+This document defines the testing standards and practices for this project, focusing on test-driven development, comprehensive coverage, and test organization.
+
+## Coverage Requirements
+
+1. **Algorithm Package**
+   - 100% code coverage requirement for all algorithm code
+   - All edge cases must be explicitly tested
+   - All exported functions must have dedicated tests
+
+2. **Application Code**
+   - Minimum 80% code coverage for application code
+   - Critical paths must have 100% coverage
+   - UI components must have tests for all user interactions
+
+3. **Measurement and Reporting**
+   - Use Jest coverage reports to track coverage metrics
+   - Include coverage reports in CI/CD pipelines
+   - Block merges if coverage thresholds are not met
+
+## Test-Driven Development
+
+1. **Test-First Approach**
+   - Write tests before implementing the feature
+   - Start with failing tests that define requirements
+   - Implement the minimum code necessary to make tests pass
+   - Refactor while keeping tests green
+
+2. **Test Organization**
+   - Group tests by functionality
+   - Use descriptive test names that explain behavior
+   - Follow the Arrange-Act-Assert pattern
+   - Keep test files focused on specific units of functionality
+
+3. **Test Lifecycle**
+   - Create: Write tests that define expected behavior
+   - Run: Verify tests fail for the right reasons 
+   - Implement: Write code to make tests pass
+   - Refactor: Improve code while keeping tests passing
+   - Repeat: Continue the cycle for each feature
+
+## Test Categories
+
+1. **Unit Tests**
+   - Test individual functions and components in isolation
+   - Mock dependencies to ensure true unit testing
+   - Focus on testing business logic, not implementation details
+   - Ensure each test tests exactly one thing
+
+2. **Integration Tests**
+   - Test how modules work together
+   - Include tests for API interactions
+   - Test component compositions
+   - Verify correct data flow between modules
+
+3. **End-to-End Tests**
+   - Test complete user workflows
+   - Focus on critical user journeys
+   - Test real integrations when possible
+   - Simulate actual user behavior
+
+## Edge Case Testing
+
+1. **Required Edge Cases**
+   - Empty inputs/collections
+   - Boundary values
+   - Error conditions
+   - Malformed data
+   - Performance under load
+
+2. **Algorithm Specific Cases**
+   - Companies with no bullishness data
+   - Companies with no incoming/outgoing admiration
+   - Extreme ratings (very high/low)
+   - Disconnected subgraphs
+   - Convergence edge cases
+
+3. **Documentation Requirements**
+   - Document which edge cases each test covers
+   - Include reason for each edge case test
+   - Document any known limitations
+
+## Test Structure
+
+1. **File Organization**
+   - Mirror source file structure in test files
+   - Name test files with `.test.ts` or `.spec.ts` suffix
+   - Group related tests in describe blocks
+   - Use nested describe blocks for subtopics
+
+2. **Test Naming**
+   - Use descriptive test names following "should <expected behavior> when <condition>" format
+   - Keep test descriptions focused on business requirements
+   - Avoid technical jargon in test descriptions
+   - Use consistent naming patterns across test files
+
+3. **Example Structure**
+
+```typescript
+describe('Bullishness Calculation', () => {
+  describe('with uniform employee weighting', () => {
+    it('should calculate correct average for single company', () => {
+      // Arrange
+      // Act
+      // Assert
+    });
+    
+    it('should handle empty employee list', () => {
+      // Arrange
+      // Act
+      // Assert
+    });
+  });
+  
+  describe('edge cases', () => {
+    it('should handle companies with only one eligible employee', () => {
+      // Arrange
+      // Act
+      // Assert
+    });
+  });
+});
+```
+
+## Testing Tools and Utilities
+
+1. **Core Tools**
+   - Jest: Main testing framework
+   - React Testing Library: For component tests
+   - MSW: For API mocking
+
+2. **Custom Test Utilities**
+   - Create test data generators for common scenarios
+   - Build fixtures for complex test cases
+   - Implement custom matchers for domain-specific assertions
+   - Create test wrappers for common setup/teardown
+
+Remember: Tests are documentation. Well-written tests explain how the system should behave and serve as living documentation of requirements.
