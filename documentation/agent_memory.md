@@ -24,15 +24,17 @@ This repository is a monorepo structure for developing and managing multi-agent 
 - Husky for git hooks integration
 - ESLint v8 for code linting
 - Prettier for code formatting
-- Pre-commit hooks to ensure code quality on every commit
+- Pre-commit hooks to ensure code quality and test coverage on every commit
 - TurboRepo for monorepo management
+- Jest for unit testing
 
 ### Code Quality Standards
 
 - ESLint configuration for JavaScript and TypeScript files
 - Prettier configuration for consistent code formatting
-- Husky pre-commit hooks that run lint-staged
+- Husky pre-commit hooks that run lint-staged and tests
 - Lint-staged configuration to format and lint only staged files
+- Jest unit tests with TypeScript support
 
 ### Package Structure
 
@@ -44,6 +46,7 @@ The multiagent-consensus package implements a framework for running multi-agent 
 - `src/types/` contains TypeScript interfaces and types
 - `src/providers/` contains LLM provider implementations
 - `src/utils/` contains utility functions
+- `src/__tests__/` contains unit tests organized by module
 
 #### web (Next.js Application)
 
@@ -53,6 +56,14 @@ The web application is built with:
 - TypeScript
 - Tailwind CSS
 - ESLint for code quality
+
+### Consensus Methods
+
+The package implements three consensus methods:
+
+- **Majority**: Requires more than 50% of responses to agree
+- **Supermajority**: Requires at least 75% of responses to agree (updated from 2/3)
+- **Unanimous**: Requires all responses to agree
 
 ## Implementation Progress
 
@@ -73,11 +84,13 @@ The web application is built with:
 - [x] Creation of a phased implementation checklist
 - [x] Resolution of configuration conflicts in monorepo setup
 - [x] Downgrade to ESLint v8 for better compatibility
+- [x] Setting up unit testing with Jest
+- [x] Updating supermajority consensus threshold to 75%
+- [x] Updating testing standards documentation
 
 ### In Progress
 
 - [ ] Creation of a comprehensive README for the multiagent-consensus package
-- [ ] Setting up unit testing with Jest
 - [ ] Implementation of proper error handling and validation
 - [ ] Preparation for npm package publishing
 
@@ -100,6 +113,10 @@ The web application is built with:
 | 2025-03-27 | Documentation Updates      | Created comprehensive folder structure documentation and phased implementation checklist                                    |
 | 2025-03-27 | Configuration Conflict Fix | Resolved ESLint and PostCSS configuration conflicts in the monorepo setup, switched to ESLint v8                            |
 | 2025-03-27 | Repository Rename          | Renamed repository from multiagent-mono to multiagent-consensus-mono to better reflect its purpose                          |
+| 2025-03-27 | Testing Implementation     | Set up Jest testing framework, added unit tests for consensus methods and engine, configured pre-commit hooks to run tests  |
+| 2025-03-27 | Consensus Method Update    | Updated supermajority consensus threshold from 2/3 to 75% for more stringent agreement requirements                         |
+| 2025-03-27 | Documentation Enhancement  | Updated testing standards with directory conventions and guidelines for handling test failures                              |
+| 2025-03-27 | Configuration Fix          | Fixed TypeScript configuration to properly exclude compiled files from source input                                         |
 
 ## Future Considerations
 
@@ -110,4 +127,4 @@ The web application is built with:
 - Adding support for additional LLM providers
 - Implementing more advanced consensus algorithms
 - Creating visualization tools for debate analysis
-- Adding a comprehensive testing strategy
+- Enhancing test coverage and implementing integration tests
