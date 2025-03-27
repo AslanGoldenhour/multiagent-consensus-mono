@@ -1,30 +1,22 @@
 /* eslint-disable */
 /**
- * Simple Consensus Example
+ * Simple Consensus Example (ts-node version)
  *
- * This example demonstrates using the multiagent-consensus package with JavaScript.
+ * This example demonstrates using the multiagent-consensus package with JavaScript,
+ * running directly from source files via ts-node.
  *
- * To run this example, you have two options:
- *
- * OPTION 1: When using the published package:
- * 1. Install the package: npm install multiagent-consensus
- * 2. Ensure you have set up your environment variables for API keys
- * 3. Run with: node simple-consensus.js
- *
- * OPTION 2: When developing the package:
- * 1. Build the package first: npm run build (this creates the dist directory)
- * 2. Run with: node examples/simple-consensus.js
- *
- * If you're having trouble with the dist import below, you can alternatively:
+ * To run this example:
  * 1. Install ts-node: npm install -D ts-node
- * 2. Update the import to use: require('../src')
- * 3. Run with: npx ts-node examples/simple-consensus.js
+ * 2. Ensure you have set up your environment variables for API keys
+ * 3. Run with: npx ts-node examples/simple-consensus-tsnode.js
+ *
+ * This version is optimized for quick development iteration as it doesn't require
+ * building the package first.
  */
 
-// Import the package
-// There are multiple ways to import the ConsensusEngine
-const multiagentConsensus = require('../dist');
-const { ConsensusEngine } = require('../dist/consensus/engine');
+// Import directly from the source files
+// There are multiple ways to import when using ts-node
+const { ConsensusEngine } = require('../src/consensus/engine');
 require('dotenv').config();
 
 /**

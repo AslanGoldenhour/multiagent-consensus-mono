@@ -21,6 +21,7 @@
     "prepublishOnly": "npm run clean && npm run build && npm run test",
     "example": "node examples/simple-consensus.js",
     "example:ts": "ts-node examples/typescript-example.ts",
+    "example:direct": "ts-node examples/simple-consensus-tsnode.js",
     "setup:examples": "node examples/setup.js"
   },
   "keywords": [

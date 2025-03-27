@@ -187,50 +187,55 @@ const engine = new ConsensusEngine({
 });
 ```
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## Running the Examples
 
-The package includes both JavaScript and TypeScript examples to demonstrate functionality:
+The package includes both JavaScript and TypeScript examples to demonstrate functionality. There are two main ways to run these examples:
 
-### JavaScript Example
+### Option 1: As a Package Consumer
+
+When you've installed the package as a dependency in your own project:
 
 ```bash
 # Install the package
 npm install multiagent-consensus
 
-# Run the example
+# Copy example files to your project
+# Run the JavaScript example
 node simple-consensus.js
-```
 
-### TypeScript Example
-
-```bash
-# Install the package and TypeScript support
-npm install multiagent-consensus
-npm install -D typescript ts-node @types/node
-
-# Run the example directly with ts-node
+# Or run the TypeScript example
 npx ts-node typescript-example.ts
 ```
 
-### For Package Development
+### Option 2: As a Package Developer
 
-When developing the package itself:
+When developing the package itself, you have two sub-options:
+
+#### A) Build the package first (recommended)
 
 ```bash
 # From the package directory
+npm run build         # Build the package first - this creates the dist directory
 npm run example       # Run the JavaScript example
 npm run example:ts    # Run the TypeScript example
 ```
+
+The build step compiles the TypeScript source files into JavaScript in the dist directory. The examples import from this directory.
+
+#### B) Use ts-node directly (for quick iteration)
+
+If you're making frequent changes to the source and want to test quickly without rebuilding:
+
+```bash
+# Install ts-node if not already installed
+npm install -D ts-node
+
+# Edit the import in examples to use '../src' instead of '../dist'
+# Then run directly with ts-node
+npx ts-node examples/simple-consensus.js
+```
+
+This approach imports directly from the TypeScript source files using ts-node, bypassing the need to build the dist directory.
 
 ## License
 
