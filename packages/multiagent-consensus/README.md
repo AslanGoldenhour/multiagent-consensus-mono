@@ -189,53 +189,32 @@ const engine = new ConsensusEngine({
 
 ## Running the Examples
 
-The package includes both JavaScript and TypeScript examples to demonstrate functionality. There are two main ways to run these examples:
+The package includes a JavaScript example to demonstrate functionality.
 
-### Option 1: As a Package Consumer
+### As a Package Consumer
 
-When you've installed the package as a dependency in your own project:
+When you've installed the published package as a dependency in your project:
 
 ```bash
 # Install the package
 npm install multiagent-consensus
 
-# Copy example files to your project
+# Copy the example file to your project
 # Run the JavaScript example
 node simple-consensus.js
-
-# Or run the TypeScript example
-npx ts-node typescript-example.ts
 ```
 
-### Option 2: As a Package Developer
+### As a Package Developer
 
-When developing the package itself, you have two sub-options:
-
-#### A) Build the package first (recommended)
+When developing the package itself:
 
 ```bash
 # From the package directory
 npm run build         # Build the package first - this creates the dist directory
 npm run example       # Run the JavaScript example
-npm run example:ts    # Run the TypeScript example
 ```
 
-The build step compiles the TypeScript source files into JavaScript in the dist directory. The examples import from this directory.
-
-#### B) Use ts-node directly (for quick iteration)
-
-If you're making frequent changes to the source and want to test quickly without rebuilding:
-
-```bash
-# Install ts-node if not already installed
-npm install -D ts-node
-
-# Edit the import in examples to use '../src' instead of '../dist'
-# Then run directly with ts-node
-npx ts-node examples/simple-consensus.js
-```
-
-This approach imports directly from the TypeScript source files using ts-node, bypassing the need to build the dist directory.
+The build step is crucial as it compiles the TypeScript source files into JavaScript in the `dist` directory. The example imports code from this directory, so if you make changes to the source files, you'll need to rebuild the package before running the example again.
 
 ## License
 
