@@ -13,9 +13,6 @@ npm test -- -- --coverage
 echo "🏆 Updating README badges..."
 node scripts/update-badges.js
 
-# Stage the updated README files
-echo "📝 Staging updated README files..."
-git add README.md packages/multiagent-consensus/README.md
 
 # Run lint-staged to format and lint code
 echo "🔎 Running linters and formatters..."
