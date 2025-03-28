@@ -110,14 +110,14 @@ npm run test
 
 ## 📊 Code Metrics
 
-- **Total**: 4319 lines
+- **Total**: 4327 lines
 
 ### By Language
 
 | Language | Lines |
 | -------- | ----- |
 | ts       | 3,178 |
-| js       | 1,012 |
+| js       | 1,020 |
 | tsx      | 107   |
 | css      | 22    |
 
@@ -127,7 +127,7 @@ npm run test
 | -------- | ----- |
 | core     | 3,174 |
 | examples | 776   |
-| other    | 322   |
+| other    | 330   |
 | configs  | 47    |
 
 ## 📄 License

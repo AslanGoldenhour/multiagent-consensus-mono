@@ -10,13 +10,13 @@
  *   node scripts/measure-sloc.js
  */
 
+// For this utility script, we disable some lint rules that would otherwise apply
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const fs = require('fs');
 const path = require('path');
 const sloc = require('sloc');
-const { execSync } = require('child_process');
 
 // Configuration
 const rootDir = path.resolve(__dirname, '..');
