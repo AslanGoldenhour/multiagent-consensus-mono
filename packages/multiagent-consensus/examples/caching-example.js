@@ -1,104 +1,196 @@
 /**
- * Example demonstrating the caching feature of multiagent-consensus
+ * In-Memory Cache Example
+ * ======================
  *
- * This example shows how to:
- * 1. Enable caching with default settings
- * 2. Configure caching options
- * 3. View cache statistics
- * 4. Perform manual cache operations
+ * This example demonstrates how to use the built-in in-memory caching system
+ * with the multiagent-consensus package. In-memory caching is perfect for:
+ * - Development and testing environments
+ * - Single-server deployments
+ * - Reducing API costs by avoiding redundant LLM calls
+ * - Improving response times for repeated queries
+ *
+ * The in-memory adapter is the default cache adapter and is ideal for
+ * getting started quickly without additional infrastructure.
  */
 
-// Note: When running this example directly, use the following commands:
-// 1. Ensure you're in the package directory: cd packages/multiagent-consensus
-// 2. Run with Node.js: node examples/caching-example.js
-
-// For ESM:
-// import { config } from 'dotenv';
-// import { ConsensusEngine } from 'multiagent-consensus';
-// config();
-
-// For CommonJS (this example uses CommonJS for simplicity):
-// We disable the ESLint rule for require statements as this is an example file
-/* eslint-disable @typescript-eslint/no-var-requires */
-require('dotenv').config();
+// We use CommonJS for compatibility with both Node.js and the browser
 const { ConsensusEngine } = require('multiagent-consensus');
-/* eslint-enable @typescript-eslint/no-var-requires */
 
-// Allow console logs in this example file
-/* eslint-disable no-console */
+// ============================
+// Engine Configuration
+// ============================
 
-// Create a simple engine with caching enabled
+console.log('🔧 Configuring consensus engine with in-memory caching...');
+
+// Create a consensus engine with in-memory caching enabled
 const engine = new ConsensusEngine({
+  // LLM Configuration
   models: ['gpt-3.5-turbo', 'claude-3-haiku'],
   consensusMethod: 'majority',
   maxRounds: 2,
+
+  // Cache Configuration
   cache: {
     enabled: true, // Enable caching
-    adapter: 'memory', // Use in-memory cache (default)
-    ttl: 3600, // 1 hour TTL (default)
+    adapter: 'memory', // Use memory adapter (this is the default)
+    ttl: 3600, // Cache TTL: 1 hour in seconds
+
+    // Memory-specific options
+    adapterOptions: {
+      maxSize: 1000, // Maximum number of entries to store
+      defaultTtl: 3600, // Default TTL: 1 hour in seconds
+    },
   },
 });
 
-// Function to run a query and display results
+// ============================
+// Helper Functions
+// ============================
+
+/**
+ * Run a query through the consensus engine and display results.
+ * @param {string} query - The query to process
+ * @returns {Promise<object>} - The consensus result
+ */
 async function runQuery(query) {
-  console.log(`\nRunning query: "${query}"`);
-  console.time('Response time');
+  console.log(`\n📝 Query: "${query}"`);
+  console.time('⏱️ Response time');
 
-  const result = await engine.run(query);
+  try {
+    const result = await engine.run(query);
+    console.timeEnd('⏱️ Response time');
 
-  console.timeEnd('Response time');
-  console.log(`Answer: ${result.answer}`);
+    console.log('🤖 Answer:', result.answer);
 
-  // Display cache information if available
-  if (result.metadata.cachingEnabled) {
-    console.log('\nCache Information:');
-    console.log(`- Caching enabled: ${result.metadata.cachingEnabled}`);
+    // Display cache information
+    if (result.metadata.cachingEnabled) {
+      console.log('\n📊 Cache Statistics:');
+      console.log(`   Status: ${result.metadata.cachingEnabled ? 'Enabled' : 'Disabled'}`);
 
-    if (result.metadata.cacheStats) {
-      console.log(`- Cache hits: ${result.metadata.cacheStats.hits}`);
-      console.log(`- Cache misses: ${result.metadata.cacheStats.misses}`);
-      console.log(`- Time saved: ${result.metadata.cacheStats.timeSaved}ms`);
+      if (result.metadata.cacheStats) {
+        const { hits, misses, timeSaved } = result.metadata.cacheStats;
+        console.log(`   Hits: ${hits}`);
+        console.log(`   Misses: ${misses}`);
+        console.log(`   Time saved: ${timeSaved}ms`);
+
+        // Calculate hit rate if there were any requests
+        const total = hits + misses;
+        if (total > 0) {
+          const hitRate = (hits / total) * 100;
+          console.log(`   Hit rate: ${hitRate.toFixed(1)}%`);
+        }
+      }
     }
-  }
 
-  return result;
+    return result;
+  } catch (error) {
+    console.error('❌ Error:', error.message);
+    if (error.stack) console.error(error.stack);
+    return null;
+  }
 }
 
-// Main function to demonstrate caching
-async function demonstrateCaching() {
-  console.log('Multiagent Consensus Caching Example');
-  console.log('====================================');
+/**
+ * Demonstrates advanced cache operations using the cache adapter directly.
+ */
+async function demonstrateCacheOperations() {
+  console.log('\n🧰 Manual Cache Operations:');
+
+  if (!engine.cache) {
+    console.log('❌ Cache adapter not available.');
+    return;
+  }
+
+  try {
+    // 1. Get the current cache size (only available with memory adapter)
+    console.log('\n1️⃣ Checking cache size...');
+    if ('size' in engine.cache) {
+      console.log(`✅ Current cache size: ${engine.cache.size} entries`);
+    } else {
+      console.log('ℹ️ Size property not available (only exists on memory adapter)');
+    }
+
+    // 2. Store a custom value
+    console.log('\n2️⃣ Storing a custom value...');
+    await engine.cache.set('custom-key', {
+      message: 'This is a manually cached value',
+      timestamp: new Date().toISOString(),
+    });
+    console.log('✅ Value stored successfully.');
+
+    // 3. Retrieve the value
+    console.log('\n3️⃣ Retrieving custom value...');
+    const value = await engine.cache.get('custom-key');
+
+    if (value) {
+      console.log('✅ Retrieved value:');
+      console.log(value);
+    } else {
+      console.log('❌ Value not found in cache.');
+    }
+
+    // 4. Delete specific key
+    console.log('\n4️⃣ Deleting custom key...');
+    await engine.cache.delete('custom-key');
+    console.log('✅ Key deleted.');
+
+    // 5. Verify deletion
+    const checkValue = await engine.cache.get('custom-key');
+    console.log(
+      'Value after deletion:',
+      checkValue === null ? 'null (correctly deleted)' : 'still exists (error)'
+    );
+
+    // 6. Clearing the entire cache
+    console.log('\n5️⃣ Clearing the entire cache...');
+    await engine.cache.clear();
+    console.log('✅ Cache cleared. All entries have been removed.');
+
+    if ('size' in engine.cache) {
+      console.log(`ℹ️ Cache size after clearing: ${engine.cache.size} entries`);
+    }
+  } catch (error) {
+    console.error('❌ Error during cache operations:', error);
+  }
+}
+
+// ============================
+// Main Demonstration
+// ============================
+
+async function runDemonstration() {
+  console.log('\n🚀 IN-MEMORY CACHE DEMONSTRATION');
+  console.log('================================');
 
   try {
     // First query - should be a cache miss
-    console.log('\n1. First query (should be a cache miss):');
+    console.log('\n🔍 STEP 1: First query (should be a cache miss)');
     await runQuery('What is the capital of France?');
 
-    // Second query with the same prompt - should be a cache hit
-    console.log('\n2. Second query with same prompt (should be a cache hit):');
+    // Same query again - should be a cache hit
+    console.log('\n🔍 STEP 2: Same query again (should be a cache hit)');
     await runQuery('What is the capital of France?');
 
     // Different query - should be a cache miss
-    console.log('\n3. Different query (should be a cache miss):');
+    console.log('\n🔍 STEP 3: Different query (should be a cache miss)');
     await runQuery('What is the capital of Japan?');
 
-    // Manual cache operations
-    console.log('\n4. Performing manual cache operations:');
-    if (engine.cache) {
-      console.log('- Clearing the cache...');
-      await engine.cache.clear();
+    // Same second query - should be a cache hit
+    console.log('\n🔍 STEP 4: Repeating the second query (should be a cache hit)');
+    await runQuery('What is the capital of Japan?');
 
-      console.log('- Cache cleared, running the first query again (should be a miss):');
-      await runQuery('What is the capital of France?');
-    } else {
-      console.log('- Cache is not available for manual operations.');
-    }
+    // Demonstrate manual cache operations
+    console.log('\n🔍 STEP 5: Advanced cache operations');
+    await demonstrateCacheOperations();
+
+    console.log('\n✨ Demonstration completed successfully!');
+    console.log('In-memory caching is now configured and working properly.');
+    console.log('\n💡 Note: Memory cache is wiped when your application restarts.');
+    console.log('    For persistent caching, consider using the Redis adapter.');
   } catch (error) {
-    console.error('Error:', error.message);
-    if (error.stack) console.error(error.stack);
+    console.error('\n❌ Demonstration error:', error);
   }
 }
 
 // Run the demonstration
-demonstrateCaching();
-/* eslint-enable no-console */
+runDemonstration().catch(console.error);

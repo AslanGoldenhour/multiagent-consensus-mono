@@ -41,6 +41,7 @@ export class EnvManager {
           this.initialized = true;
           return;
         } else {
+          // eslint-disable-next-line no-console
           console.warn(`Env file not found at custom path: ${customPath}`);
         }
       }
@@ -56,15 +57,18 @@ export class EnvManager {
         if (fs.existsSync(envPath)) {
           dotenv.config({ path: envPath });
           this.initialized = true;
+          // eslint-disable-next-line no-console
           console.log(`Loaded environment variables from ${envPath}`);
           return;
         }
       }
 
       // If we get here, no .env file was found
+      // eslint-disable-next-line no-console
       console.warn('No .env file found. Using existing environment variables.');
       this.initialized = true;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error loading environment variables:', error);
       // Set initialized to true to prevent further attempts
       this.initialized = true;

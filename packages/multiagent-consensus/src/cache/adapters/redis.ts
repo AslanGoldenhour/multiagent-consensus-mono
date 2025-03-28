@@ -23,24 +23,42 @@ export interface RedisCacheAdapterOptions extends CacheAdapterOptions {
  * Provides a Redis-backed implementation of the CacheAdapter interface.
  */
 export class RedisCacheAdapter implements CacheAdapter {
-  private redis: Redis;
+  private redisClient: Redis | null = null;
   private options: Required<Pick<RedisCacheAdapterOptions, 'defaultTtl' | 'prefix'>>;
+  private connectionOptions: { url: string; token: string };
 
   /**
    * Creates a new RedisCacheAdapter instance.
    * @param options Configuration options for the adapter.
    */
   constructor(options?: RedisCacheAdapterOptions) {
-    // Initialize Redis client from options or environment variables
-    this.redis = new Redis({
+    // Store connection options for lazy initialization
+    this.connectionOptions = {
       url: options?.url || process.env.REDIS_URL || '',
       token: options?.token || process.env.REDIS_TOKEN || '',
-    });
+    };
 
     this.options = {
       defaultTtl: options?.defaultTtl ?? 3600, // Default: 1 hour
       prefix: options?.prefix ?? process.env.REDIS_PREFIX ?? 'consensus:',
     };
+  }
+
+  /**
+   * Lazily initializes the Redis client when needed.
+   * @returns The Redis client instance
+   * @private
+   */
+  private getRedisClient(): Redis {
+    if (!this.redisClient) {
+      if (!this.connectionOptions.url || !this.connectionOptions.token) {
+        throw new Error(
+          'Redis connection information missing. Please provide url and token in options or set REDIS_URL and REDIS_TOKEN environment variables.'
+        );
+      }
+      this.redisClient = new Redis(this.connectionOptions);
+    }
+    return this.redisClient;
   }
 
   /**
@@ -61,8 +79,10 @@ export class RedisCacheAdapter implements CacheAdapter {
   async get(key: string): Promise<any | null> {
     try {
       const prefixedKey = this.getPrefixedKey(key);
-      const value = await this.redis.get(prefixedKey);
-      return value === null ? null : JSON.parse(String(value));
+      const value = await this.getRedisClient().get(prefixedKey);
+
+      // Return value directly as Upstash Redis already handles JSON deserialization
+      return value;
     } catch (error) {
       console.error('Error retrieving from Redis cache:', error);
       return null;
@@ -79,14 +99,13 @@ export class RedisCacheAdapter implements CacheAdapter {
     try {
       const prefixedKey = this.getPrefixedKey(key);
       const effectiveTtl = ttl ?? this.options.defaultTtl;
-      const serializedValue = JSON.stringify(value);
 
       if (effectiveTtl > 0) {
         // Set with expiration
-        await this.redis.set(prefixedKey, serializedValue, { ex: effectiveTtl });
+        await this.getRedisClient().set(prefixedKey, value, { ex: effectiveTtl });
       } else {
         // Set without expiration
-        await this.redis.set(prefixedKey, serializedValue);
+        await this.getRedisClient().set(prefixedKey, value);
       }
     } catch (error) {
       console.error('Error storing in Redis cache:', error);
@@ -100,7 +119,7 @@ export class RedisCacheAdapter implements CacheAdapter {
   async delete(key: string): Promise<void> {
     try {
       const prefixedKey = this.getPrefixedKey(key);
-      await this.redis.del(prefixedKey);
+      await this.getRedisClient().del(prefixedKey);
     } catch (error) {
       console.error('Error deleting from Redis cache:', error);
     }
@@ -119,14 +138,17 @@ export class RedisCacheAdapter implements CacheAdapter {
 
       // Use SCAN to find all keys with the prefix
       do {
-        const result = await this.redis.scan(cursor, { match: `${prefix}*`, count: 100 });
+        const result = await this.getRedisClient().scan(cursor, {
+          match: `${prefix}*`,
+          count: 100,
+        });
         cursor = Number(result[0]); // Ensure cursor is a number
         keys = keys.concat(result[1] as string[]);
       } while (cursor !== 0);
 
       // Delete all found keys if there are any
       if (keys.length > 0) {
-        await this.redis.del(...keys);
+        await this.getRedisClient().del(...keys);
       }
     } catch (error) {
       console.error('Error clearing Redis cache:', error);
