@@ -10,7 +10,7 @@ export interface ConsensusConfig {
   /**
    * The consensus method to use
    * - majority: Simple majority vote (default)
-   * - supermajority: Requires 2/3 or more agreement
+   * - supermajority: Requires 75% or more agreement
    * - unanimous: Requires all models to agree
    */
   consensusMethod?: 'majority' | 'supermajority' | 'unanimous';
@@ -39,6 +39,33 @@ export interface ConsensusConfig {
   apiKeys?: Record<string, string>;
 
   /**
+   * Per-model configuration options
+   */
+  modelConfig?: {
+    [modelName: string]: {
+      /**
+       * System prompt to use for this model
+       */
+      systemPrompt?: string;
+
+      /**
+       * Temperature setting (0-2)
+       */
+      temperature?: number;
+
+      /**
+       * Maximum tokens to generate
+       */
+      maxTokens?: number;
+
+      /**
+       * Additional model-specific parameters
+       */
+      additionalParams?: Record<string, any>;
+    };
+  };
+
+  /**
    * Output format preferences
    */
   output?: {
@@ -55,6 +82,6 @@ export interface ConsensusConfig {
     /**
      * Format of the final answer
      */
-    format?: 'text' | 'json' | 'markdown';
+    format?: 'text' | 'json';
   };
 }

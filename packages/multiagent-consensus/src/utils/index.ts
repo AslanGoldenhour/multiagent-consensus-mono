@@ -38,3 +38,16 @@ export function formatModelResponse(response: any): {
     metadata: {},
   };
 }
+
+/**
+ * Utilities for the consensus engine
+ */
+
+// Export the environment utilities
+export * from './env';
+
+// Export error handling utilities
+export * from './errors';
+
+// Export validation utilities
+export * from './validation';

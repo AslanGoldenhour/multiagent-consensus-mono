@@ -1,5 +1,6 @@
 import { ConsensusConfig } from '../types/config';
 import { LLMProvider } from '../types/provider';
+import { envManager, ProviderError, handleError } from '../utils';
 // We'll use the ai package dynamically to avoid issues with missing providers
 // import { generateText } from 'ai';
 
@@ -132,6 +133,17 @@ async function dynamicImport(moduleName: string): Promise<any> {
 }
 
 /**
+ * Check if an API key is available for a provider
+ * @param providerName The name of the provider
+ * @returns True if the API key is available, false otherwise
+ */
+function hasApiKey(providerName: string): boolean {
+  // Get provider keys from environment manager
+  const providerKeys = envManager.getProviderKeys();
+  return providerName in providerKeys;
+}
+
+/**
  * A Vercel AI SDK Provider implementation
  */
 class VercelAIProvider implements LLMProvider {
@@ -162,12 +174,29 @@ class VercelAIProvider implements LLMProvider {
     };
   }> {
     try {
+      // Check if model is supported
+      if (!this.supportedModels.includes(modelName)) {
+        throw ProviderError.modelNotFound(this.name, modelName);
+      }
+
+      // Check if API key is available
+      if (!hasApiKey(this.name)) {
+        throw ProviderError.apiKeyError(this.name);
+      }
+
       // Import the Vercel AI SDK dynamically
       const aiModule = await dynamicImport('ai');
+      if (!aiModule) {
+        throw new Error('Failed to import the Vercel AI SDK');
+      }
+
       const { generateText } = aiModule;
 
       // Import the provider dynamically
       const providerModule = await dynamicImport(this.providerPackage);
+      if (!providerModule) {
+        throw new Error(`Failed to import provider ${this.providerPackage}`);
+      }
 
       // Create provider model options
       const modelOptions: Record<string, unknown> = {};
@@ -207,17 +236,33 @@ class VercelAIProvider implements LLMProvider {
         },
       };
     } catch (error) {
+      // Handle specific error types
+      if (error instanceof ProviderError) {
+        throw error;
+      }
+
+      // Check for common error patterns
+      const errorMessage = error instanceof Error ? error.message : String(error);
+
+      if (errorMessage.includes('rate limit') || errorMessage.includes('429')) {
+        throw ProviderError.rateLimitExceeded(this.name, modelName);
+      }
+
+      if (errorMessage.includes('timeout') || errorMessage.includes('timed out')) {
+        throw ProviderError.timeout(this.name, modelName);
+      }
+
+      // Log the error for debugging
       console.warn(`Error generating response with ${this.name}:`, error);
 
-      // Fallback to simulated response
-      return {
-        text: `Error with ${this.name} provider. Falling back to simulated response for ${modelName}: ${prompt.substring(0, 20)}...`,
-        tokenUsage: {
-          prompt: prompt.length / 4,
-          completion: 50,
-          total: prompt.length / 4 + 50,
-        },
-      };
+      // Create a generic provider error
+      throw ProviderError.apiError(
+        this.name,
+        errorMessage,
+        modelName,
+        errorMessage.includes('401') ? 401 : undefined,
+        error instanceof Error ? error : undefined
+      );
     }
   }
 }
@@ -245,6 +290,9 @@ class GenericProvider implements LLMProvider {
       total: number;
     };
   }> {
+    console.warn(`Using generic provider for model: ${modelName}`);
+    console.warn('Please install at least one Vercel AI SDK provider package.');
+
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -260,31 +308,64 @@ class GenericProvider implements LLMProvider {
 }
 
 /**
+ * Get a list of available providers with API keys
+ * @returns Array of provider names with available API keys
+ */
+function getAvailableProviders(): string[] {
+  const providerKeys = envManager.getProviderKeys();
+  return Object.keys(providerKeys);
+}
+
+/**
  * Load providers based on the models requested in the config
  * This will dynamically load installed Vercel AI SDK providers
  * @param config The consensus configuration
  * @returns Array of initialized providers
  */
 export function loadProviders(config: ConsensusConfig): LLMProvider[] {
-  // Check which provider packages are installed
-  const installedProviders = Object.keys(PROVIDER_PACKAGES).filter(isProviderInstalled);
+  try {
+    // Check which provider packages are installed and have API keys available
+    const installedProviders = Object.keys(PROVIDER_PACKAGES).filter(packageName => {
+      const isInstalled = isProviderInstalled(packageName);
+      const hasKey = hasApiKey(PROVIDER_PACKAGES[packageName].name);
+      return isInstalled && hasKey;
+    });
 
-  if (installedProviders.length === 0) {
-    console.warn(
-      'No AI providers found. Please install at least one Vercel AI SDK provider package.'
-    );
-    console.warn('Example: npm install @ai-sdk/openai');
-    // Return a generic provider as fallback
+    if (installedProviders.length === 0) {
+      console.warn(
+        'No AI providers found or no API keys configured. Please install at least one Vercel AI SDK provider package and configure its API key.'
+      );
+
+      // List which providers are installed but missing API keys
+      const installedWithoutKeys = Object.keys(PROVIDER_PACKAGES).filter(packageName => {
+        return isProviderInstalled(packageName) && !hasApiKey(PROVIDER_PACKAGES[packageName].name);
+      });
+
+      if (installedWithoutKeys.length > 0) {
+        console.warn(
+          `The following providers are installed but missing API keys: ${installedWithoutKeys
+            .map(pkg => PROVIDER_PACKAGES[pkg].name)
+            .join(', ')}`
+        );
+        console.warn('Please configure the appropriate environment variables in your .env file.');
+      }
+
+      // Return a generic provider as fallback
+      return [new GenericProvider()];
+    }
+
+    // Create providers for each installed package
+    const providers: LLMProvider[] = installedProviders.map(packageName => {
+      const config = PROVIDER_PACKAGES[packageName];
+      return new VercelAIProvider(config.name, packageName, config.models);
+    });
+
+    console.log('Available AI providers:', providers.map(p => p.name).join(', '));
+
+    return providers;
+  } catch (error) {
+    // Handle any errors during provider loading
+    console.error('Error loading providers:', error);
     return [new GenericProvider()];
   }
-
-  // Create providers for each installed package
-  const providers: LLMProvider[] = installedProviders.map(packageName => {
-    const config = PROVIDER_PACKAGES[packageName];
-    return new VercelAIProvider(config.name, packageName, config.models);
-  });
-
-  console.log('Available AI providers:', providers.map(p => p.name).join(', '));
-
-  return providers;
 }
