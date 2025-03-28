@@ -13,6 +13,7 @@ A framework for running multi-agent consensus processes using multiple Large Lan
 - 📊 **Detailed Results**: Get comprehensive metadata including confidence scores and processing time
 - 🧪 **Flexible Output**: Customize output format (text, JSON) and content detail
 - 🛠️ **Highly Configurable**: Set bias, system prompts, and customize debate parameters
+- 🧩 **Extensible Provider System**: Support for all Vercel AI SDK providers with the ability to register custom providers
 
 ## Installation
 
@@ -219,3 +220,44 @@ The build step is crucial as it compiles the TypeScript source files into JavaSc
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Supported LLM Providers
+
+This package supports all providers available in the Vercel AI SDK. The key providers include:
+
+- **OpenAI** (`@ai-sdk/openai`): GPT-4, GPT-4 Turbo, GPT-4o, GPT-3.5 Turbo
+- **Anthropic** (`@ai-sdk/anthropic`): Claude 3 Opus, Sonnet, Haiku, Claude 2 series
+- **Google** (`@ai-sdk/google`): Gemini Pro, Gemini Pro Vision
+- **Mistral** (`@ai-sdk/mistral`): Mistral's various models
+- **Cohere** (`@ai-sdk/cohere`): Command series
+- **Groq** (`@ai-sdk/groq`): Ultra-fast inference for Llama, Mixtral
+- **Amazon Bedrock** (`@ai-sdk/amazon-bedrock`): Access to Amazon's hosted models
+- **Azure** (`@ai-sdk/azure`): Azure-hosted OpenAI models
+- **Google Vertex AI** (`@ai-sdk/google-vertex`): Google Cloud's AI offerings
+- And many more!
+
+### Using Providers
+
+To use a specific provider, simply install the corresponding package:
+
+```bash
+npm install @ai-sdk/openai  # For OpenAI models
+npm install @ai-sdk/anthropic  # For Claude models
+# etc.
+```
+
+The package will automatically detect which providers are installed and make them available for use.
+
+### Registering Custom Providers
+
+You can register custom providers programmatically:
+
+```typescript
+import { registerProvider } from 'multiagent-consensus';
+
+// Register a custom provider
+registerProvider('my-custom-provider-package', {
+  name: 'customProvider',
+  models: ['custom-model-1', 'custom-model-2'],
+});
+```
