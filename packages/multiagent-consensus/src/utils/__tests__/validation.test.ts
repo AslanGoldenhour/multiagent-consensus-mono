@@ -208,8 +208,8 @@ describe('Validator', () => {
         maxRounds: -1,
       };
 
-      expect(() => Validator.consensusConfig(config1)).toThrow(ValidationError);
-      expect(() => Validator.consensusConfig(config2)).toThrow(ValidationError);
+      expect(() => Validator.consensusConfig(config1)).toThrow(ConfigurationError);
+      expect(() => Validator.consensusConfig(config2)).toThrow(ConfigurationError);
     });
 
     it('should throw ValidationError if output format is invalid', () => {
@@ -256,7 +256,7 @@ describe('Validator', () => {
       );
     });
 
-    it('should throw ValidationError if maxTokens is invalid', () => {
+    it('should throw ConfigurationError if maxTokens is invalid', () => {
       const config1 = {
         models: ['gpt-4', 'claude-3-opus'],
         modelConfig: {
@@ -275,8 +275,8 @@ describe('Validator', () => {
         },
       };
 
-      expect(() => Validator.consensusConfig(config1)).toThrow(ValidationError);
-      expect(() => Validator.consensusConfig(config2)).toThrow(ValidationError);
+      expect(() => Validator.consensusConfig(config1)).toThrow(ConfigurationError);
+      expect(() => Validator.consensusConfig(config2)).toThrow(ConfigurationError);
     });
   });
 });
