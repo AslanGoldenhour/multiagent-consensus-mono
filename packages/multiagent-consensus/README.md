@@ -300,6 +300,21 @@ const engine = new ConsensusEngine({
   },
 });
 
+// File-based caching configuration
+const engine = new ConsensusEngine({
+  models: ['claude-3-haiku', 'gpt-4'],
+  cache: {
+    enabled: true,
+    adapter: 'file', // Use file-based persistent storage
+    ttl: 86400, // 24-hour TTL
+    adapterOptions: {
+      cacheDir: './cache', // Directory to store cache files
+      createDirIfNotExists: true, // Create directory if it doesn't exist
+      maxAge: 604800, // Clean up files older than 7 days (in seconds)
+    },
+  },
+});
+
 // Manual cache operations
 await engine.cache.clear(); // Clear the entire cache
 await engine.cache.delete('specific-key'); // Delete a specific entry
@@ -308,8 +323,8 @@ await engine.cache.delete('specific-key'); // Delete a specific entry
 ### Available Cache Adapters
 
 - **Memory**: An in-memory cache suitable for development and single-instance applications
-- **File**: (Coming soon) File-based persistent cache for single-server applications
-- **Redis**: (Coming soon) Distributed cache for multi-server applications
+- **File**: File-based persistent cache for development, debugging, and single-server applications
+- **Redis**: Distributed cache for multi-server production applications
 - **Custom Adapters**: Create your own adapter by implementing the `CacheAdapter` interface
 
 ### Configuring Caching via Environment Variables
@@ -325,6 +340,10 @@ CACHE_TTL_SECONDS=3600         # Cache TTL in seconds (1 hour)
 # Redis Configuration (when using Redis adapter)
 REDIS_URL=redis://localhost:6379
 REDIS_TOKEN=your_auth_token
+REDIS_PREFIX=consensus:        # Key prefix for Redis cache entries
+
+# File Cache Configuration (when using file adapter)
+CACHE_DIR=./cache             # Directory to store cache files
 ```
 
 ### Caching Benefits
@@ -333,3 +352,5 @@ REDIS_TOKEN=your_auth_token
 - **Improved Response Time**: Get instant responses for cached queries
 - **Consistent Answers**: Ensure the same query always yields the same response
 - **Configurable Expiration**: Set time-to-live (TTL) to control cache freshness
+- **Persistence Options**: Choose between in-memory, file-based, or Redis storage
+- **Performance Metrics**: Track cache hits, misses, and time saved
