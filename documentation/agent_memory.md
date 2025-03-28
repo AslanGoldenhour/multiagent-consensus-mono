@@ -152,7 +152,7 @@ The caching implementation includes the following components:
 - **Cache Adapters**: Provides an abstract interface for different storage backends
   - `MemoryCacheAdapter`: In-memory storage for development and single-instance applications
   - `RedisCacheAdapter`: Upstash Redis integration for distributed production environments
-  - Additional adapters (File) planned for future implementation
+  - `FileCacheAdapter`: File-based persistent storage for development, debugging, and single-server deployments
 - **Cache Key Generation**: Creates deterministic keys from request parameters
 
   - Sorts object properties for consistent serialization
@@ -172,6 +172,7 @@ The caching implementation includes the following components:
   - Programmatic configuration via ConsensusEngine constructor
   - Support for adapter-specific options
   - Redis integration with Upstash (`REDIS_URL`, `REDIS_TOKEN`, `REDIS_PREFIX`)
+  - File adapter configuration options (`CACHE_DIR`, directory creation, cleanup settings)
 
 - **Integration with ConsensusEngine**:
   - Automatic middleware initialization
@@ -205,6 +206,7 @@ The caching implementation includes the following components:
 - [x] Create example environment files for reference
 - [x] Implement caching mechanisms for responses
 - [x] Add Redis adapter for distributed caching in production environments
+- [x] Add File adapter for persistent file-based caching storage
 
 ### In Progress
 
