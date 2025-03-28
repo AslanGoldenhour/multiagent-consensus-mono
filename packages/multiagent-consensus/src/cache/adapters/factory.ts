@@ -4,6 +4,7 @@
 import { CacheAdapter, CacheAdapterOptions, BuiltInCacheAdapterType } from '../types';
 import { MemoryCacheAdapter } from './memory';
 import { RedisCacheAdapter, RedisCacheAdapterOptions } from './redis';
+import { FileCacheAdapter, FileCacheAdapterOptions } from './file';
 
 /**
  * Creates a cache adapter based on the specified type.
@@ -24,8 +25,7 @@ export function createCacheAdapter(
       return new RedisCacheAdapter(options as RedisCacheAdapterOptions);
 
     case 'file':
-      // This would be implemented when needed
-      throw new Error('File cache adapter not yet implemented');
+      return new FileCacheAdapter(options as FileCacheAdapterOptions);
 
     default:
       throw new Error(`Unsupported cache adapter type: ${type}`);
