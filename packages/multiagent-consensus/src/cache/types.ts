@@ -66,29 +66,92 @@ export interface CacheAdapterOptions {
 }
 
 /**
- * Configuration for the caching system.
+ * Cache configuration options
  */
 export interface CacheConfig {
   /**
-   * Whether caching is enabled.
+   * Whether caching is enabled
    */
   enabled: boolean;
 
   /**
-   * The cache adapter to use.
-   * Can be a string identifier for built-in adapters, or a custom adapter instance.
+   * Cache adapter to use
+   * - memory: In-memory cache (default)
+   * - file: File-based cache
+   * - redis: Redis-based cache
    */
-  adapter?: BuiltInCacheAdapterType | CacheAdapter;
+  adapter: 'memory' | 'file' | 'redis';
 
   /**
-   * Default TTL (time-to-live) in seconds for cached items.
+   * Cache time-to-live in seconds
+   * Default: 3600 (1 hour)
    */
-  ttl?: number;
+  ttl: number;
 
   /**
-   * Options for the adapter.
+   * Whether to bypass the cache for this request
+   * When true, the cache will be checked but not used, and the result will not be cached
+   * Useful for getting fresh responses while still recording metrics
    */
-  adapterOptions?: CacheAdapterOptions;
+  bypass?: boolean;
+
+  /**
+   * Whether to force a fresh response by ignoring and replacing any cached result
+   * When true, existing cache entries will be invalidated and replaced with new responses
+   * Useful for refreshing cached data
+   */
+  bustCache?: boolean;
+
+  /**
+   * Adapter-specific options
+   */
+  adapterOptions?: {
+    /**
+     * File adapter options
+     */
+    file?: {
+      /**
+       * Directory to store cache files
+       * Default: ./cache
+       */
+      cacheDir?: string;
+
+      /**
+       * Whether to create cache directory if it doesn't exist
+       * Default: true
+       */
+      createDirIfNotExists?: boolean;
+
+      /**
+       * How frequently to check for and clean expired cache entries (in ms)
+       * Default: 3600000 (1 hour)
+       */
+      cleanupInterval?: number;
+    };
+
+    /**
+     * Redis adapter options
+     */
+    redis?: {
+      /**
+       * Redis connection URL
+       * Required if using REDIS_URL environment variable is not set
+       */
+      url?: string;
+
+      /**
+       * Redis token for authentication
+       * Required if using REDIS_TOKEN environment variable is not set and URL doesn't include auth
+       */
+      token?: string;
+
+      /**
+       * Prefix for Redis keys
+       * Default: multiagent:cache:
+       */
+      prefix?: string;
+    };
+  };
 }
 
 /**

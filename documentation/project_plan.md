@@ -35,9 +35,9 @@ This document provides a comprehensive phased implementation plan for the multia
   - [x] Redis Cache Adapter
   - [x] File Cache Adapter
 - [x] Create comprehensive test suite
-- [ ] Implement Inngest for durable execution
 - [ ] Implement multi-round debate mode
 - [ ] Add support for streaming responses
+- [ ] Implement Inngest for durable execution
 - [ ] Implement logging and debugging tools
   - [ ] Clean up existing console.log|warn|error|info statements
 - [ ] Add support for confidence scores

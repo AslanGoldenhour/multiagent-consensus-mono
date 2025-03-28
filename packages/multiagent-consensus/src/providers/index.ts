@@ -11,88 +11,333 @@ interface ProviderConfig {
 }
 
 const PROVIDER_PACKAGES: Record<string, ProviderConfig> = {
-  // Core providers
+  // Official Vercel AI SDK Providers
   '@ai-sdk/openai': {
     name: 'openai',
-    models: ['gpt-4', 'gpt-4-turbo', 'gpt-4o', 'gpt-4-vision', 'gpt-3.5-turbo'],
+    models: [
+      'gpt-4o',
+      'gpt-4o-mini',
+      'gpt-4-turbo',
+      'gpt-4-vision',
+      'gpt-4',
+      'gpt-3.5-turbo',
+      'o1',
+      'o1-mini',
+      'o1-preview',
+      'text-embedding-3-small',
+      'text-embedding-3-large',
+      'text-embedding-ada-002',
+      'dall-e-3',
+      'dall-e-2',
+    ],
   },
   '@ai-sdk/anthropic': {
     name: 'anthropic',
     models: [
-      'claude-3-opus',
-      'claude-3-sonnet',
-      'claude-3-haiku',
+      'claude-3-7-sonnet-20250219',
+      'claude-3-5-sonnet-20241022',
+      'claude-3-5-sonnet-20240620',
+      'claude-3-5-haiku-20241022',
+      'claude-3-opus-20240229',
+      'claude-3-sonnet-20240229',
+      'claude-3-haiku-20240307',
       'claude-2.1',
       'claude-2.0',
       'claude-instant-1.2',
     ],
   },
-  '@ai-sdk/google': {
-    name: 'google',
-    models: ['gemini-pro', 'gemini-pro-vision', 'gemini-flash'],
-  },
-  '@ai-sdk/mistral': {
-    name: 'mistral',
-    models: ['mistral-tiny', 'mistral-small', 'mistral-medium', 'mistral-large'],
-  },
-  '@ai-sdk/cohere': {
-    name: 'cohere',
-    models: ['command', 'command-light', 'command-r', 'command-r-plus'],
-  },
-
-  // Additional providers
-  '@ai-sdk/groq': {
-    name: 'groq',
-    models: ['llama-3-8b-8192', 'llama-3-70b-8192', 'mixtral-8x7b-32768', 'gemma-7b-it'],
+  '@ai-sdk/azure': {
+    name: 'azure',
+    models: [
+      'gpt-4',
+      'gpt-4-turbo',
+      'gpt-4o',
+      'gpt-3.5-turbo',
+      'gpt-4-vision',
+      'gpt-4-32k',
+      'text-embedding-ada-002',
+    ],
   },
   '@ai-sdk/amazon-bedrock': {
     name: 'amazonBedrock',
     models: [
-      'anthropic.claude-3-opus',
-      'anthropic.claude-3-sonnet',
-      'anthropic.claude-3-haiku',
-      'amazon.titan',
+      'anthropic.claude-3-opus-20240229',
+      'anthropic.claude-3-sonnet-20240229',
+      'anthropic.claude-3-haiku-20240307',
+      'anthropic.claude-3.5-sonnet-20240620',
+      'amazon.titan-text-express-v1',
+      'amazon.titan-text-premier-v1',
+      'cohere.command-light-text-v14',
+      'cohere.command-r-v1',
+      'meta.llama-3-8b-v1:0',
+      'meta.llama-3-70b-v1:0',
+      'meta.llama-3-8b-instructr-v1:0',
+      'meta.llama-3-70b-instruct-v1:0',
     ],
   },
-  '@ai-sdk/azure': {
-    name: 'azure',
-    models: ['gpt-4', 'gpt-4-turbo', 'gpt-4o', 'gpt-3.5-turbo'],
-  },
-  '@ai-sdk/perplexity': {
-    name: 'perplexity',
-    models: ['sonar-small-online', 'sonar-medium-online', 'sonar-large-online'],
-  },
-  '@ai-sdk/xai': {
-    name: 'xai',
-    models: ['grok-1'],
-  },
-  '@ai-sdk/deepseek': {
-    name: 'deepseek',
-    models: ['deepseek-coder', 'deepseek-chat'],
-  },
-  '@ai-sdk/togetherai': {
-    name: 'togetherai',
-    models: ['llama-3-8b-8192', 'llama-3-70b-8192', 'mixtral-8x7b-32768'],
-  },
-  '@ai-sdk/fireworks': {
-    name: 'fireworks',
-    models: ['llama-v3-8b', 'llama-v3-70b', 'mixtral-8x7b'],
+  '@ai-sdk/google': {
+    name: 'google',
+    models: [
+      'gemini-1.0-pro',
+      'gemini-1.0-pro-vision',
+      'gemini-1.5-flash',
+      'gemini-1.5-pro',
+      'gemini-2.0-flash-exp',
+      'gemini-pro-embedding',
+    ],
   },
   '@ai-sdk/google-vertex': {
     name: 'googleVertex',
-    models: ['gemini-pro', 'gemini-pro-vision', 'text-bison', 'code-bison'],
+    models: [
+      'gemini-1.0-pro',
+      'gemini-1.0-pro-vision',
+      'gemini-1.5-flash',
+      'gemini-1.5-pro',
+      'gemini-2.0-flash-exp',
+      'text-bison',
+      'code-bison',
+      'chat-bison',
+      'text-unicorn',
+    ],
   },
-  '@ai-sdk/replicate': {
-    name: 'replicate',
-    models: ['llama-3-8b', 'llama-3-70b', 'llava'],
+  '@ai-sdk/mistral': {
+    name: 'mistral',
+    models: [
+      'mistral-small-latest',
+      'mistral-medium-latest',
+      'mistral-large-latest',
+      'mistral-large-2402',
+      'mistral-medium-2312',
+      'mistral-small-2402',
+      'open-mistral-7b',
+      'open-mixtral-8x7b',
+      'pixtral-12b-2409',
+      'pixtral-large-latest',
+    ],
+  },
+  '@ai-sdk/xai': {
+    name: 'xai',
+    models: [
+      'grok-1',
+      'grok-1-vision',
+      'grok-beta',
+      'grok-vision-beta',
+      'grok-2-1212',
+      'grok-2-vision-1212',
+    ],
+  },
+  '@ai-sdk/togetherai': {
+    name: 'togetherai',
+    models: [
+      'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
+      'meta-llama/Llama-3.3-70B-Instruct',
+      'meta-llama/Meta-Llama-3-8B-Instruct',
+      'meta-llama/Meta-Llama-3-70B-Instruct',
+      'mistralai/Mistral-7B-Instruct-v0.2',
+      'mistralai/Mixtral-8x7B-Instruct-v0.1',
+      'teknium/OpenHermes-2.5-Mistral-7B',
+      'togethercomputer/StripedHyena-Nous-7B',
+    ],
+  },
+  '@ai-sdk/cohere': {
+    name: 'cohere',
+    models: [
+      'command',
+      'command-light',
+      'command-r',
+      'command-r-plus',
+      'command-r-plus-preview',
+      'command-nightly',
+      'embed-english-v3.0',
+      'embed-multilingual-v3.0',
+    ],
+  },
+  '@ai-sdk/fireworks': {
+    name: 'fireworks',
+    models: [
+      'llama-v3-8b',
+      'llama-v3-70b',
+      'llama-v3-1-8b',
+      'llama-v3-1-70b',
+      'llama-v3-1-8b-vision',
+      'llama-v3-1-70b-vision',
+      'llama-v3-3-8b',
+      'llama-v3-3-70b',
+      'mixtral-8x7b',
+      'mixtral-8x22b',
+      'intelliverse-20b',
+    ],
+  },
+  '@ai-sdk/deepinfra': {
+    name: 'deepinfra',
+    models: [
+      'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
+      'meta-llama/Llama-3.3-70B-Instruct',
+      'deepseek-ai/DeepSeek-V3',
+      'deepseek-ai/DeepSeek-R1',
+      'deepseek-ai/DeepSeek-R1-Distill-Llama-70B',
+      'deepseek-ai/DeepSeek-R1-Turbo',
+      'jondurbin/bagel-34b-v0.2',
+      'mistralai/Mistral-7B-Instruct-v0.2',
+      'mistralai/Mixtral-8x7B-Instruct-v0.1',
+      'Qwen/Qwen1.5-32B-Chat',
+    ],
+  },
+  '@ai-sdk/deepseek': {
+    name: 'deepseek',
+    models: [
+      'deepseek-chat',
+      'deepseek-coder',
+      'deepseek-vision',
+      'deepseek-vl',
+      'deepseek-reasoner',
+    ],
   },
   '@ai-sdk/cerebras': {
     name: 'cerebras',
-    models: ['cerebras-gpt', 'slimpajama'],
+    models: ['llama3.1-8b', 'llama3.3-70b', 'slimpajama-6.7b', 'gpt-j-6b'],
+  },
+  '@ai-sdk/groq': {
+    name: 'groq',
+    models: [
+      'llama-3-8b-8192',
+      'llama-3-70b-8192',
+      'llama-3.1-8b-instant',
+      'llama-3.3-70b-versatile',
+      'mixtral-8x7b-32768',
+      'gemma2-9b-it',
+      'mixtral-8x22b',
+      'mistral-saba-24b',
+      'qwen-qwq-32b',
+      'deepseek-r1-distill-llama-70b',
+    ],
+  },
+  '@ai-sdk/perplexity': {
+    name: 'perplexity',
+    models: [
+      'sonar-small-online',
+      'sonar-medium-online',
+      'sonar-large-online',
+      'sonar-small-chat',
+      'sonar-medium-chat',
+      'sonar-large-chat',
+    ],
+  },
+  '@ai-sdk/replicate': {
+    name: 'replicate',
+    models: [
+      'llama-3-8b',
+      'llama-3-70b',
+      'llama-2-70b',
+      'llava',
+      'mixtral-8x7b',
+      'sdxl',
+      'stable-diffusion',
+    ],
   },
   '@ai-sdk/luma': {
     name: 'luma',
-    models: ['photon', 'photon-flash'],
+    models: ['photon', 'photon-flash', 'photon-public'],
+  },
+
+  // Community Providers
+  'ollama-ai-provider': {
+    name: 'ollama',
+    models: [
+      'llama3',
+      'llama3:8b',
+      'llama3:70b',
+      'llama3.1',
+      'gemma2',
+      'qwen2:7b',
+      'mistral',
+      'mixtral',
+      'codellama',
+      'phi3',
+      'orca-mini',
+      'vicuna',
+    ],
+  },
+  'chrome-ai': {
+    name: 'chromeai',
+    models: ['gemini-pro'],
+  },
+  '@friendliai/ai-provider': {
+    name: 'friendliai',
+    models: ['openai-compatible', 'anthropic-compatible'],
+  },
+  '@portkey-ai/vercel-provider': {
+    name: 'portkey',
+    models: [
+      'openai-compatible',
+      'anthropic-compatible',
+      'mistral-compatible',
+      'google-compatible',
+    ],
+  },
+  'workers-ai-provider': {
+    name: 'cloudflareWorkersAi',
+    models: [
+      '@cf/meta/llama-3-8b-instruct',
+      '@cf/meta/llama-3-70b-instruct',
+      '@cf/mistral/mistral-7b-instruct-v0.1',
+      '@cf/mistral/mistral-large-latest',
+    ],
+  },
+  '@openrouter/ai-sdk-provider': {
+    name: 'openrouter',
+    models: [
+      // OpenRouter supports multiple models from different providers
+      'openai/gpt-4o',
+      'anthropic/claude-3-opus-20240229',
+      'mistral/mistral-large-latest',
+      'meta-llama/llama-3-70b-instruct',
+      'google/gemini-1.5-pro',
+    ],
+  },
+  '@crosshatch/ai-provider': {
+    name: 'crosshatch',
+    models: ['openai-compatible'],
+  },
+  'mixedbread-ai-provider': {
+    name: 'mixedbread',
+    models: ['openai-compatible'],
+  },
+  'voyage-ai-provider': {
+    name: 'voyage',
+    models: ['voyage-2', 'voyage-2-code', 'voyage-embedding'],
+  },
+  '@mem0/vercel-ai-provider': {
+    name: 'mem0',
+    models: ['mem0-default'],
+  },
+  'spark-ai-provider': {
+    name: 'spark',
+    models: ['sparkdesk'],
+  },
+  'anthropic-vertex-ai': {
+    name: 'anthropicVertex',
+    models: ['claude-3-opus', 'claude-3-sonnet', 'claude-3-haiku'],
+  },
+  'zhipu-ai-provider': {
+    name: 'zhipu',
+    models: ['glm-4', 'glm-4v', 'glm-3-turbo'],
+  },
+  '@langdb/vercel-ai-provider': {
+    name: 'langdb',
+    models: ['langdb-default'],
+  },
+  'nvidia-nim-provider': {
+    name: 'nvidianim',
+    models: ['llama3-8b', 'llama3-70b', 'mixtral-8x7b'],
+  },
+  'baseten-ai-provider': {
+    name: 'baseten',
+    models: ['openai-compatible'],
+  },
+  'inflection-ai-provider': {
+    name: 'inflection',
+    models: ['inflection-1', 'inflection-2'],
   },
 };
 

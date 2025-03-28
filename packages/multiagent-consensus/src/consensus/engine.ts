@@ -1,12 +1,13 @@
 import { ConsensusConfig } from '../types/config';
-import { ConsensusResult } from '../types/result';
+import { ConsensusResult, DebateResult } from '../types/result';
 import { LLMProvider } from '../types/provider';
 import { loadProviders } from '../providers';
 import { getConsensusMethod } from './methods';
-import { createCachingMiddleware } from '../cache/middleware';
+import { DebateManager } from './debate';
 import { getCacheAdapter } from '../cache/adapters/factory';
 import { CacheAdapter, CacheConfig } from '../cache/types';
-import type { LanguageModelV1Middleware } from 'ai';
+import { createCachingMiddleware } from '../cache/middleware';
+import { envManager } from '../utils';
 
 /**
  * The main engine for running consensus processes
@@ -15,7 +16,7 @@ export class ConsensusEngine {
   private config: ConsensusConfig;
   private providers: LLMProvider[] = [];
   private cacheAdapter: CacheAdapter | null = null;
-  private cachingMiddleware: LanguageModelV1Middleware | null = null;
+  private debateManager: DebateManager | null = null;
 
   /**
    * Create a new ConsensusEngine
@@ -41,19 +42,114 @@ export class ConsensusEngine {
       ...config,
     };
 
+    // Handle programmatically provided API keys
+    this.setupApiKeys();
+
     // Initialize providers
     this.initializeProviders();
 
     // Initialize caching if enabled
     this.initializeCache();
+
+    // Initialize debate manager if debate config is provided
+    if (this.config.debate) {
+      this.debateManager = new DebateManager(this.config, this.providers);
+    }
+  }
+
+  /**
+   * Setup API keys from config or environment variables
+   */
+  private setupApiKeys(): void {
+    // If API keys are provided in the config, use them
+    if (this.config.apiKeys) {
+      const envVars: Record<string, string> = {};
+
+      // Convert provider names to environment variable names
+      for (const [provider, key] of Object.entries(this.config.apiKeys)) {
+        if (key) {
+          // Map common provider names to their environment variable names
+          switch (provider.toLowerCase()) {
+            case 'openai':
+              envVars['OPENAI_API_KEY'] = key;
+              break;
+            case 'anthropic':
+              envVars['ANTHROPIC_API_KEY'] = key;
+              break;
+            case 'google':
+              envVars['GOOGLE_API_KEY'] = key;
+              break;
+            case 'mistral':
+              envVars['MISTRAL_API_KEY'] = key;
+              break;
+            case 'cohere':
+              envVars['COHERE_API_KEY'] = key;
+              break;
+            case 'groq':
+              envVars['GROQ_API_KEY'] = key;
+              break;
+            case 'xai':
+              envVars['XAI_API_KEY'] = key;
+              break;
+            case 'perplexity':
+              envVars['PERPLEXITY_API_KEY'] = key;
+              break;
+            case 'replicate':
+              envVars['REPLICATE_API_TOKEN'] = key;
+              break;
+            case 'deepseek':
+              envVars['DEEPSEEK_API_KEY'] = key;
+              break;
+            case 'togetherai':
+              envVars['TOGETHER_API_KEY'] = key;
+              break;
+            case 'fireworks':
+              envVars['FIREWORKS_API_KEY'] = key;
+              break;
+            case 'cerebras':
+              envVars['CEREBRAS_API_KEY'] = key;
+              break;
+            case 'luma':
+              envVars['LUMA_API_KEY'] = key;
+              break;
+            // Add any custom mapping or fallback to default
+            default:
+              envVars[`${provider.toUpperCase()}_API_KEY`] = key;
+              break;
+          }
+        }
+      }
+
+      // Set the environment variables
+      envManager.setVariables(envVars);
+    }
   }
 
   /**
    * Initialize providers based on requested models
    */
   private initializeProviders(): void {
-    // This would load the necessary providers for the models in config
-    this.providers = loadProviders(this.config);
+    // Load the providers for the models specified in the config
+    const rawProviders = loadProviders(this.config);
+
+    // If caching is enabled, wrap the providers with our caching middleware
+    if (this.config.cache?.enabled) {
+      // Initialize caching if not already done
+      if (!this.cacheAdapter) {
+        this.initializeCache();
+      }
+
+      // Create the caching middleware with our config
+      const wrapWithCaching = createCachingMiddleware(this.config.cache);
+
+      // Wrap each provider with caching
+      this.providers = rawProviders.map(provider => {
+        return wrapWithCaching.wrapProviderWithCaching(provider);
+      });
+    } else {
+      // If caching is disabled, use the raw providers
+      this.providers = rawProviders;
+    }
   }
 
   /**
@@ -66,13 +162,8 @@ export class ConsensusEngine {
         this.config.cache.adapter,
         this.config.cache.adapterOptions
       );
-
-      // Create caching middleware
-      this.cachingMiddleware = createCachingMiddleware(this.config.cache);
-
-      // Apply middleware to providers when implemented
-      // This would be done when providers actually use the Vercel AI SDK
-      // For now, we'll just set up the middleware for future use
+      // Our custom caching system works by directly intercepting provider calls
+      // before they reach the Vercel AI SDK, so we don't need middleware here
     }
   }
 
@@ -185,6 +276,18 @@ export class ConsensusEngine {
     }
 
     return result;
+  }
+
+  /**
+   * Run a debate process to answer a query with multi-round deliberation
+   * @param query The query to debate
+   * @returns A promise that resolves to the debate result
+   */
+  async runDebate(query: string): Promise<DebateResult> {
+    if (!this.debateManager) {
+      this.debateManager = new DebateManager(this.config, this.providers);
+    }
+    return this.debateManager.runDebate(query);
   }
 
   /**

@@ -92,4 +92,78 @@ export interface ConsensusConfig {
    * Controls how responses are cached to improve performance and reduce API costs
    */
   cache?: CacheConfig;
+
+  /**
+   * Debate mode configuration options
+   * Controls how the multi-round debate process is conducted
+   */
+  debate?: DebateConfig;
+}
+
+/**
+ * Configuration options specific to the multi-round debate mode
+ */
+export interface DebateConfig {
+  /**
+   * Enable streaming responses in debate mode
+   * When enabled, responses will be streamed back in real-time
+   */
+  streaming?: boolean;
+
+  /**
+   * Minimum number of debate rounds to perform regardless of consensus
+   * This ensures at least a certain level of deliberation
+   */
+  minRounds?: number;
+
+  /**
+   * Whether to use specialized prompts based on query type
+   * When enabled, different prompts will be used for factual vs abstract queries
+   */
+  useSpecializedPrompts?: boolean;
+
+  /**
+   * Whether to allow models to view their own previous responses
+   * When enabled, models can see and critique their own previous responses
+   */
+  revealModelIdentities?: boolean;
+
+  /**
+   * Custom prompt templates to use for different rounds of the debate
+   * If not provided, default templates will be used
+   */
+  promptTemplates?: {
+    /**
+     * Template for the initial round of the debate
+     * Function receives the query and returns a prompt
+     */
+    initialRound?: (query: string) => string;
+
+    /**
+     * Template for subsequent rounds of the debate
+     * Function receives the query, round number, and previous responses
+     */
+    debateRound?: (
+      query: string,
+      roundNumber: number,
+      previousResponses: Array<{ model: string; response: string }>
+    ) => string;
+
+    /**
+     * Template for the final round of the debate
+     * Function receives the query, round number, and previous responses
+     */
+    finalRound?: (
+      query: string,
+      roundNumber: number,
+      previousResponses: Array<{ model: string; response: string }>
+    ) => string;
+  };
+
+  /**
+   * Optional function to determine if consensus has been reached
+   * If provided, this will be used instead of the standard consensus methods
+   * Returns true if consensus has been reached, false otherwise
+   */
+  consensusChecker?: (responses: Array<{ model: string; response: string }>) => boolean;
 }

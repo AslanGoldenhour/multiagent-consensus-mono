@@ -15,7 +15,8 @@ export class EnvManager {
   private constructor() {}
 
   /**
-   * Get the singleton instance of EnvManager
+   * Get the singleton instance
+   * @returns The EnvManager instance
    */
   public static getInstance(): EnvManager {
     if (!EnvManager.instance) {
@@ -47,12 +48,30 @@ export class EnvManager {
       }
 
       // Try loading from common locations
-      const envPaths = [
-        '.env',
-        path.resolve(process.cwd(), '.env'),
-        path.resolve(process.cwd(), '../.env'),
+      // Support both .env and .env.local files in various locations
+      const envFileNames = ['.env', '.env.local'];
+      const locations = [
+        // Current directory
+        process.cwd(),
+        // Parent directory
+        path.resolve(process.cwd(), '..'),
+        // Project root (2 levels up in case we're in a nested package)
+        path.resolve(process.cwd(), '../..'),
+        // Package directory itself
+        __dirname,
+        path.resolve(__dirname, '..'),
+        path.resolve(__dirname, '../..'),
       ];
 
+      // Create all possible env file paths
+      const envPaths: string[] = [];
+      locations.forEach(location => {
+        envFileNames.forEach(fileName => {
+          envPaths.push(path.resolve(location, fileName));
+        });
+      });
+
+      // Try to load from each path
       for (const envPath of envPaths) {
         if (fs.existsSync(envPath)) {
           dotenv.config({ path: envPath });
@@ -72,6 +91,18 @@ export class EnvManager {
       console.error('Error loading environment variables:', error);
       // Set initialized to true to prevent further attempts
       this.initialized = true;
+    }
+  }
+
+  /**
+   * Set environment variables programmatically
+   * @param variables Record of variable names to values
+   */
+  public setVariables(variables: Record<string, string>): void {
+    for (const [key, value] of Object.entries(variables)) {
+      if (value) {
+        process.env[key] = value;
+      }
     }
   }
 
@@ -125,9 +156,11 @@ export class EnvManager {
     const providerKeys: Record<string, string> = {};
     // Common provider API key environment variables
     const keyMapping: Record<string, string[]> = {
+      // Official Vercel AI SDK Providers
       openai: ['OPENAI_API_KEY'],
       anthropic: ['ANTHROPIC_API_KEY'],
       google: ['GOOGLE_API_KEY'],
+      googleVertex: ['GOOGLE_APPLICATION_CREDENTIALS'],
       mistral: ['MISTRAL_API_KEY'],
       cohere: ['COHERE_API_KEY'],
       groq: ['GROQ_API_KEY'],
@@ -136,12 +169,31 @@ export class EnvManager {
       perplexity: ['PERPLEXITY_API_KEY'],
       xai: ['XAI_API_KEY'],
       deepseek: ['DEEPSEEK_API_KEY'],
+      deepinfra: ['DEEPINFRA_API_KEY'],
       togetherai: ['TOGETHER_API_KEY'],
       fireworks: ['FIREWORKS_API_KEY'],
-      googleVertex: ['GOOGLE_APPLICATION_CREDENTIALS'],
       replicate: ['REPLICATE_API_TOKEN'],
       cerebras: ['CEREBRAS_API_KEY'],
       luma: ['LUMA_API_KEY'],
+
+      // Community Providers
+      ollama: ['OLLAMA_HOST'],
+      chromeai: ['CHROME_API_KEY'],
+      friendliai: ['FRIENDLIAI_API_KEY'],
+      portkey: ['PORTKEY_API_KEY'],
+      cloudflareWorkersAi: ['CLOUDFLARE_ACCOUNT_ID', 'CLOUDFLARE_API_TOKEN'],
+      openrouter: ['OPENROUTER_API_KEY'],
+      crosshatch: ['CROSSHATCH_API_KEY'],
+      mixedbread: ['MIXEDBREAD_API_KEY'],
+      voyage: ['VOYAGE_API_KEY'],
+      mem0: ['MEM0_API_KEY'],
+      spark: ['SPARK_APP_ID', 'SPARK_API_KEY', 'SPARK_API_SECRET'],
+      anthropicVertex: ['GOOGLE_APPLICATION_CREDENTIALS'],
+      zhipu: ['ZHIPU_API_KEY'],
+      langdb: ['LANGDB_API_KEY'],
+      nvidianim: ['NVIDIA_NIM_API_KEY'],
+      baseten: ['BASETEN_API_KEY'],
+      inflection: ['INFLECTION_API_KEY'],
     };
     // Check for each provider's API keys
     for (const [provider, keys] of Object.entries(keyMapping)) {
@@ -157,6 +209,7 @@ export class EnvManager {
         }
       }
     }
+
     return providerKeys;
   }
 }
