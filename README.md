@@ -108,6 +108,28 @@ To run tests:
 npm run test
 ```
 
+## 📊 Code Metrics
+
+- **Total**: 4319 lines
+
+### By Language
+
+| Language | Lines |
+| -------- | ----- |
+| ts       | 3,178 |
+| js       | 1,012 |
+| tsx      | 107   |
+| css      | 22    |
+
+### By Category
+
+| Category | Lines |
+| -------- | ----- |
+| core     | 3,174 |
+| examples | 776   |
+| other    | 322   |
+| configs  | 47    |
+
 ## 📄 License
 
 MIT

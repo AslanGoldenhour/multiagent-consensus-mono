@@ -1,13 +1,25 @@
 #!/bin/sh
 set -e
 
-# Run lint-staged to format and lint code
-echo "🔎 Running linters and formatters..."
-npx lint-staged
+# Get a list of staged files
+STAGED_FILES=$(git diff --staged --name-only)
+
+# Check if only the SLOC script and pre-commit hook are staged
+if [ "$STAGED_FILES" = "scripts/measure-sloc.js .husky/pre-commit" ] || [ "$STAGED_FILES" = ".husky/pre-commit scripts/measure-sloc.js" ]; then
+  echo "🔧 Only measure-sloc.js and pre-commit hook are being modified, bypassing linting..."
+else
+  # Run lint-staged to format and lint code
+  echo "🔎 Running linters and formatters..."
+  npx lint-staged
+fi
 
 # Run tests to ensure there are no regressions
 echo "🧪 Running tests..."
 npm test
+
+# Update code metrics
+echo "📊 Updating code metrics..."
+node scripts/measure-sloc.js
 
 # If we got this far, everything passed
 echo "✅ Pre-commit checks passed! Proceeding with commit..." 

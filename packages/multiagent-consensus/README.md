@@ -228,6 +228,26 @@ npm run example       # Run the JavaScript example
 
 The build step is crucial as it compiles the TypeScript source files into JavaScript in the `dist` directory. The example imports code from this directory, so if you make changes to the source files, you'll need to rebuild the package before running the example again.
 
+## 📊 Code Metrics
+
+- **Total**: 3974 lines
+
+### By Language
+
+| Language | Lines |
+| -------- | ----- |
+| ts       | 3,174 |
+| js       | 800   |
+
+### By Category
+
+| Category | Lines |
+| -------- | ----- |
+| core     | 3,174 |
+| examples | 776   |
+| configs  | 13    |
+| other    | 11    |
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
