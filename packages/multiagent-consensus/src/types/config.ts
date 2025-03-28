@@ -1,6 +1,8 @@
 /**
  * Configuration options for the consensus process
  */
+import { CacheConfig } from '../cache/types';
+
 export interface ConsensusConfig {
   /**
    * The models to use for the consensus process
@@ -84,4 +86,10 @@ export interface ConsensusConfig {
      */
     format?: 'text' | 'json';
   };
+
+  /**
+   * Caching configuration options
+   * Controls how responses are cached to improve performance and reduce API costs
+   */
+  cache?: CacheConfig;
 }

@@ -2,7 +2,11 @@ module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'prettier'],
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+  ],
   env: {
     node: true,
     browser: true,
@@ -10,10 +14,10 @@ module.exports = {
     jest: true,
   },
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 2021,
     sourceType: 'module',
   },
-  ignorePatterns: ['dist/', 'node_modules/', 'coverage/', '.next/', 'out/'],
+  ignorePatterns: ['dist/', 'node_modules/', 'coverage/', '.next/', 'out/', '**/examples/'],
   rules: {
     'prettier/prettier': 'error',
     '@typescript-eslint/explicit-module-boundary-types': 'off',

@@ -14,6 +14,7 @@ A framework for running multi-agent consensus processes using multiple Large Lan
 - 🧪 **Flexible Output**: Customize output format (text, JSON) and content detail
 - 🛠️ **Highly Configurable**: Set bias, system prompts, and customize debate parameters
 - 🧩 **Extensible Provider System**: Support for all Vercel AI SDK providers with the ability to register custom providers
+- 💾 **Response Caching**: Cache LLM responses to reduce API costs and improve performance
 
 ## Installation
 
@@ -271,3 +272,64 @@ registerProvider('my-custom-provider-package', {
   models: ['custom-model-1', 'custom-model-2'],
 });
 ```
+
+## Caching System
+
+The library includes a flexible caching system to store and reuse responses, which can significantly improve performance and reduce API costs.
+
+```typescript
+// Enable caching with default settings
+const engine = new ConsensusEngine({
+  models: ['claude-3-haiku', 'gpt-4'],
+  cache: {
+    enabled: true, // Uses in-memory cache with 1-hour TTL by default
+  },
+});
+
+// Advanced caching configuration
+const engine = new ConsensusEngine({
+  models: ['claude-3-haiku', 'gpt-4'],
+  cache: {
+    enabled: true,
+    adapter: 'redis', // Use Redis for shared caching across instances
+    ttl: 86400, // 24-hour TTL
+    adapterOptions: {
+      url: process.env.REDIS_URL,
+      token: process.env.REDIS_TOKEN,
+    },
+  },
+});
+
+// Manual cache operations
+await engine.cache.clear(); // Clear the entire cache
+await engine.cache.delete('specific-key'); // Delete a specific entry
+```
+
+### Available Cache Adapters
+
+- **Memory**: An in-memory cache suitable for development and single-instance applications
+- **File**: (Coming soon) File-based persistent cache for single-server applications
+- **Redis**: (Coming soon) Distributed cache for multi-server applications
+- **Custom Adapters**: Create your own adapter by implementing the `CacheAdapter` interface
+
+### Configuring Caching via Environment Variables
+
+You can configure caching using environment variables:
+
+```
+# Caching Configuration
+ENABLE_CACHE=true              # Enable response caching
+CACHE_ADAPTER=memory           # 'memory', 'file', or 'redis'
+CACHE_TTL_SECONDS=3600         # Cache TTL in seconds (1 hour)
+
+# Redis Configuration (when using Redis adapter)
+REDIS_URL=redis://localhost:6379
+REDIS_TOKEN=your_auth_token
+```
+
+### Caching Benefits
+
+- **Reduced API Costs**: Avoid redundant API calls for identical queries
+- **Improved Response Time**: Get instant responses for cached queries
+- **Consistent Answers**: Ensure the same query always yields the same response
+- **Configurable Expiration**: Set time-to-live (TTL) to control cache freshness

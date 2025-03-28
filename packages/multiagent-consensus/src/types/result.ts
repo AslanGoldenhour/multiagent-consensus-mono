@@ -40,6 +40,31 @@ export interface ConsensusResult {
      * Confidence scores for each model (0-1)
      */
     confidenceScores?: Record<string, number>;
+
+    /**
+     * Whether caching was enabled for this process
+     */
+    cachingEnabled?: boolean;
+
+    /**
+     * Cache statistics if caching was enabled
+     */
+    cacheStats?: {
+      /**
+       * Number of cache hits (responses served from cache)
+       */
+      hits: number;
+
+      /**
+       * Number of cache misses (responses generated from models)
+       */
+      misses: number;
+
+      /**
+       * Estimated response time saved due to cache hits (ms)
+       */
+      timeSaved: number;
+    };
   };
 
   /**

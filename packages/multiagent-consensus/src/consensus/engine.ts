@@ -3,6 +3,10 @@ import { ConsensusResult } from '../types/result';
 import { LLMProvider } from '../types/provider';
 import { loadProviders } from '../providers';
 import { getConsensusMethod } from './methods';
+import { createCachingMiddleware } from '../cache/middleware';
+import { getCacheAdapter } from '../cache/adapters/factory';
+import { CacheAdapter, CacheConfig } from '../cache/types';
+import type { LanguageModelV1Middleware } from 'ai';
 
 /**
  * The main engine for running consensus processes
@@ -10,6 +14,8 @@ import { getConsensusMethod } from './methods';
 export class ConsensusEngine {
   private config: ConsensusConfig;
   private providers: LLMProvider[] = [];
+  private cacheAdapter: CacheAdapter | null = null;
+  private cachingMiddleware: LanguageModelV1Middleware | null = null;
 
   /**
    * Create a new ConsensusEngine
@@ -25,12 +31,21 @@ export class ConsensusEngine {
         includeMetadata: true,
         format: 'text',
       },
+      // Cache configuration with defaults
+      cache: {
+        enabled: process.env.ENABLE_CACHE === 'true' || false,
+        adapter: (process.env.CACHE_ADAPTER as any) || 'memory',
+        ttl: process.env.CACHE_TTL_SECONDS ? parseInt(process.env.CACHE_TTL_SECONDS) : 3600,
+      },
       // Override with user-provided config
       ...config,
     };
 
     // Initialize providers
     this.initializeProviders();
+
+    // Initialize caching if enabled
+    this.initializeCache();
   }
 
   /**
@@ -39,6 +54,33 @@ export class ConsensusEngine {
   private initializeProviders(): void {
     // This would load the necessary providers for the models in config
     this.providers = loadProviders(this.config);
+  }
+
+  /**
+   * Initialize the caching system if enabled
+   */
+  private initializeCache(): void {
+    if (this.config.cache?.enabled) {
+      // Set up cache adapter
+      this.cacheAdapter = getCacheAdapter(
+        this.config.cache.adapter,
+        this.config.cache.adapterOptions
+      );
+
+      // Create caching middleware
+      this.cachingMiddleware = createCachingMiddleware(this.config.cache);
+
+      // Apply middleware to providers when implemented
+      // This would be done when providers actually use the Vercel AI SDK
+      // For now, we'll just set up the middleware for future use
+    }
+  }
+
+  /**
+   * Access to the cache adapter for direct cache operations
+   */
+  public get cache(): CacheAdapter | null {
+    return this.cacheAdapter;
   }
 
   /**
@@ -124,6 +166,16 @@ export class ConsensusEngine {
         rounds: currentRound,
         consensusMethod: this.config.consensusMethod || 'majority',
         confidenceScores: this.getConfidenceScores(history[currentRound - 1].responses),
+        cachingEnabled: this.config.cache?.enabled || false,
+        // Include cache statistics if available
+        // In a real implementation, we would gather these from the middleware
+        ...(this.config.cache?.enabled && {
+          cacheStats: {
+            hits: 0, // Placeholder for actual statistics from caching middleware
+            misses: 0, // Placeholder for actual statistics from caching middleware
+            timeSaved: 0, // Placeholder for actual statistics from caching middleware
+          },
+        }),
       },
     };
 

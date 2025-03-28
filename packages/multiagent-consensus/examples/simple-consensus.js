@@ -1,4 +1,3 @@
-/* eslint-disable */
 /**
  * Simple Consensus Example
  *
@@ -82,4 +81,3 @@ function printResults(result) {
 
 // Execute the example
 runConsensus();
-/* eslint-enable */
