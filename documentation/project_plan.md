@@ -33,6 +33,7 @@ This document provides a comprehensive phased implementation plan for the multia
 - [ ] Add support for streaming responses
 - [ ] Implement multi-round debate mode
 - [ ] Implement logging and debugging tools
+  - [ ] Clean up existing console.log|warn|error|info statements
 - [ ] Add support for confidence scores
 - [ ] Implement bias presets for LLM models
 - [ ] Publish package to npm registry

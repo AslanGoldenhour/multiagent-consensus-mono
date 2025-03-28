@@ -4,7 +4,7 @@ This document explains the setup and guiding principles for our project's fronte
 
 ## 1. Frontend Architecture
 
-Our dashboard is built using Next.js, an intuitive React-based framework that makes it easy to create performant, dynamic web pages. Next.js handles many complex tasks automatically, such as server-side rendering and routing, ensuring our application is both fast and SEO-friendly. We also leverage Tailwind CSS and Shadcn to build our user interfaces. 
+Our dashboard is built using Next.js, an intuitive React-based framework that makes it easy to create performant, dynamic web pages. Next.js handles many complex tasks automatically, such as server-side rendering and routing, ensuring our application is both fast and SEO-friendly. We also leverage Tailwind CSS and Shadcn to build our user interfaces.
 
 Key points:
 
@@ -18,7 +18,7 @@ Our frontend design follows key principles to ensure that our application is use
 
 - **Usability:** The interface is designed to be intuitive. Users should be able to easily navigate through the dashboard, find information about call histories, configure settings, or flag responses using clear and straightforward layouts.
 - **Accessibility:** We ensure that our design is accessible to all users, including those with visual or motor impairments. This involves the use of semantic HTML, proper contrast ratios, and keyboard navigation support.
-- **Responsiveness:** The application automatically adapts to various screen sizes, from desktop monitors to mobile devices, ensuring a smooth experience no matter the device. 
+- **Responsiveness:** The application automatically adapts to various screen sizes, from desktop monitors to mobile devices, ensuring a smooth experience no matter the device.
 
 These principles directly inform our user interface design choices, ensuring that technical complexity is hidden behind a simple, clean, and responsive design.
 
@@ -36,6 +36,7 @@ We use Tailwind CSS paired with Shadcn to style our dashboard. This combination 
 
 - We aim for a **modern, flat design** with a hint of glassmorphism in certain elements (e.g., translucent backgrounds for pop-ups or modal dialogs) for a soft, contemporary look.
 - **Color Palette:**
+
   - Primary Blue: #4A90E2
   - Accent Green: #2ECC71
   - Light Gray: #F7F7F7
@@ -46,7 +47,7 @@ We use Tailwind CSS paired with Shadcn to style our dashboard. This combination 
 
 ## 4. Component Structure
 
-Our frontend uses a component-based architecture, an approach that breaks the UI into small, reusable pieces. 
+Our frontend uses a component-based architecture, an approach that breaks the UI into small, reusable pieces.
 
 - **Organization:** Components are organized into directories based on their functionality (e.g., header, sidebar, dashboard panels, etc.).
 - **Reusability:** By keeping components independent, we can reuse them across different sections of the application, reducing redundant code and making maintenance more straightforward.

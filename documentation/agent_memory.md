@@ -159,8 +159,12 @@ The caching implementation includes the following components:
   - Handles all parameters that affect responses
 
 - **Vercel AI SDK Middleware**: Integrates with the AI SDK to intercept and cache responses
+
   - `wrapGenerate`: For standard completion requests
   - `wrapStream`: For streaming completion requests
+  - Measures and tracks actual response times for performance telemetry
+  - Provides accurate time-saving metrics based on real response measurements
+
 - **Configuration System**:
 
   - Environment variable support (`ENABLE_CACHE`, `CACHE_ADAPTER`, `CACHE_TTL_SECONDS`)
@@ -170,7 +174,7 @@ The caching implementation includes the following components:
 - **Integration with ConsensusEngine**:
   - Automatic middleware initialization
   - Public cache interface for manual operations
-  - Metadata reporting of cache statistics
+  - Metadata reporting of cache statistics and performance metrics
 
 ## Implementation Progress
 
@@ -215,37 +219,38 @@ The caching implementation includes the following components:
 
 ## Session Log
 
-| Date       | Changes                       | Details                                                                                                                                   |
-| ---------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| 2025-03-27 | Repository Initialization     | Created the multiagent-consensus-mono repository with initial structure, README.md, and .gitignore                                        |
-| 2025-03-27 | Code Quality Tools Setup      | Added Husky, ESLint, Prettier, and TypeScript configuration with pre-commit hooks for automated code formatting and linting               |
-| 2025-03-27 | Consensus Package Creation    | Created the basic structure for the multiagent-consensus package with types, interfaces, and initial implementation                       |
-| 2025-03-27 | Next.js App Creation          | Set up a Next.js web application with TypeScript, Tailwind CSS, and ESLint                                                                |
-| 2025-03-27 | Documentation Updates         | Created comprehensive folder structure documentation and phased implementation checklist                                                  |
-| 2025-03-27 | Configuration Conflict Fix    | Resolved ESLint and PostCSS configuration conflicts in the monorepo setup, switched to ESLint v8                                          |
-| 2025-03-27 | Repository Rename             | Renamed repository from multiagent-mono to multiagent-consensus-mono to better reflect its purpose                                        |
-| 2025-03-27 | Testing Implementation        | Set up Jest testing framework, added unit tests for consensus methods and engine, configured pre-commit hooks to run tests                |
-| 2025-03-27 | Consensus Method Update       | Updated supermajority consensus threshold from 2/3 to 75% for more stringent agreement requirements                                       |
-| 2025-03-27 | Documentation Enhancement     | Updated testing standards with directory conventions and guidelines for handling test failures                                            |
-| 2025-03-27 | Configuration Fix             | Fixed TypeScript configuration to properly exclude compiled files from source input                                                       |
-| 2025-03-27 | Example Creation              | Created JavaScript example for multiagent-consensus package                                                                               |
-| 2025-03-27 | Build Process Fix             | Fixed TSConfig to use CommonJS modules for better compatibility with require() statements                                                 |
-| 2025-03-27 | Documentation Update          | Cleaned up documentation to match implementation and provide clear usage instructions                                                     |
-| 2025-03-27 | Package Publishing            | Published version 0.1.0 of multiagent-consensus package to npm, making it available for public use                                        |
-| 2025-03-27 | Vercel AI SDK Integration     | Integrated Vercel AI SDK to dynamically support multiple LLM providers based on installed packages                                        |
-| 2025-03-27 | Documentation Updates         | Added documentation for project plan and agent memory                                                                                     |
-| 2025-03-27 | Configuration Conflict Fix    | Fixed conflicts in configuration files                                                                                                    |
-| 2025-03-27 | Testing Implementation        | Added CI/CD pipeline with GitHub Actions                                                                                                  |
-| 2025-03-27 | Documentation Updates         | Updated documentation to reflect implementation details                                                                                   |
-| 2025-03-27 | Provider System Expansion     | Expanded provider system to support all Vercel AI SDK providers and custom registration                                                   |
-| 2025-03-27 | Error Handling Implementation | Created comprehensive error handling system with custom error classes for different error scenarios                                       |
-| 2025-03-27 | Environment Management        | Implemented dotenv-based environment manager to securely handle API keys and environment variables                                        |
-| 2025-03-27 | Validation System             | Created robust validation utilities to ensure data integrity throughout the application                                                   |
-| 2025-03-27 | Test Infrastructure           | Implemented comprehensive test suite with 100% coverage for utility modules and provider functionality                                    |
-| 2025-03-27 | Testing Strategy Update       | Adopted a more pragmatic testing approach for provider tests, focusing on observable behavior rather than internal implementation details |
-| 2025-03-28 | Environment Structure         | Implemented a structured approach to environment variables with layered .env files and better secret management                           |
-| 2025-03-28 | Feature Branch Creation       | Created feature/implement-caching branch to implement response caching with the Vercel AI SDK                                             |
-| 2025-03-28 | Caching Implementation        | Implemented flexible caching system with memory adapter, middleware integration, and cache key generation utilities                       |
+| Date                      | Changes                       | Details                                                                                                                                   |
+| ------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| 2025-03-27                | Repository Initialization     | Created the multiagent-consensus-mono repository with initial structure, README.md, and .gitignore                                        |
+| 2025-03-27                | Code Quality Tools Setup      | Added Husky, ESLint, Prettier, and TypeScript configuration with pre-commit hooks for automated code formatting and linting               |
+| 2025-03-27                | Consensus Package Creation    | Created the basic structure for the multiagent-consensus package with types, interfaces, and initial implementation                       |
+| 2025-03-27                | Next.js App Creation          | Set up a Next.js web application with TypeScript, Tailwind CSS, and ESLint                                                                |
+| 2025-03-27                | Documentation Updates         | Created comprehensive folder structure documentation and phased implementation checklist                                                  |
+| 2025-03-27                | Configuration Conflict Fix    | Resolved ESLint and PostCSS configuration conflicts in the monorepo setup, switched to ESLint v8                                          |
+| 2025-03-27                | Repository Rename             | Renamed repository from multiagent-mono to multiagent-consensus-mono to better reflect its purpose                                        |
+| 2025-03-27                | Testing Implementation        | Set up Jest testing framework, added unit tests for consensus methods and engine, configured pre-commit hooks to run tests                |
+| 2025-03-27                | Consensus Method Update       | Updated supermajority consensus threshold from 2/3 to 75% for more stringent agreement requirements                                       |
+| 2025-03-27                | Documentation Enhancement     | Updated testing standards with directory conventions and guidelines for handling test failures                                            |
+| 2025-03-27                | Configuration Fix             | Fixed TypeScript configuration to properly exclude compiled files from source input                                                       |
+| 2025-03-27                | Example Creation              | Created JavaScript example for multiagent-consensus package                                                                               |
+| 2025-03-27                | Build Process Fix             | Fixed TSConfig to use CommonJS modules for better compatibility with require() statements                                                 |
+| 2025-03-27                | Documentation Update          | Cleaned up documentation to match implementation and provide clear usage instructions                                                     |
+| 2025-03-27                | Package Publishing            | Published version 0.1.0 of multiagent-consensus package to npm, making it available for public use                                        |
+| 2025-03-27                | Vercel AI SDK Integration     | Integrated Vercel AI SDK to dynamically support multiple LLM providers based on installed packages                                        |
+| 2025-03-27                | Documentation Updates         | Added documentation for project plan and agent memory                                                                                     |
+| 2025-03-27                | Configuration Conflict Fix    | Fixed conflicts in configuration files                                                                                                    |
+| 2025-03-27                | Testing Implementation        | Added CI/CD pipeline with GitHub Actions                                                                                                  |
+| 2025-03-27                | Documentation Updates         | Updated documentation to reflect implementation details                                                                                   |
+| 2025-03-27                | Provider System Expansion     | Expanded provider system to support all Vercel AI SDK providers and custom registration                                                   |
+| 2025-03-27                | Error Handling Implementation | Created comprehensive error handling system with custom error classes for different error scenarios                                       |
+| 2025-03-27                | Environment Management        | Implemented dotenv-based environment manager to securely handle API keys and environment variables                                        |
+| 2025-03-27                | Validation System             | Created robust validation utilities to ensure data integrity throughout the application                                                   |
+| 2025-03-27                | Test Infrastructure           | Implemented comprehensive test suite with 100% coverage for utility modules and provider functionality                                    |
+| 2025-03-27                | Testing Strategy Update       | Adopted a more pragmatic testing approach for provider tests, focusing on observable behavior rather than internal implementation details |
+| 2025-03-28                | Environment Structure         | Implemented a structured approach to environment variables with layered .env files and better secret management                           |
+| 2025-03-28                | Feature Branch Creation       | Created feature/implement-caching branch to implement response caching with the Vercel AI SDK                                             |
+| 2025-03-28                | Caching Implementation        | Implemented flexible caching system with memory adapter, middleware integration, and cache key generation utilities                       |
+| 2025-03-28 08:16:24 -0500 | Caching Improvements          | Enhanced caching middleware to measure actual API response times for accurate performance metrics and code cleanup                        |
 
 ## Future Considerations
 

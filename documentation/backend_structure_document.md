@@ -65,14 +65,17 @@ Even though the core system is library-based, here's a human-readable view of po
 The backend exposes a set of RESTful APIs for both the library’s functionality and the dashboard UI. The API endpoints are designed to be clear, straightforward, and intuitive:
 
 - **POST /debate:**
+
   - Purpose: Accepts a query and configuration details to initiate a multi-agent debate.
   - Returns: The debate result, including the chosen answer, metadata about the models, tokens used, and confidence rating.
 
 - **GET /history:**
+
   - Purpose: Retrieves past debate sessions with their metadata for analysis and review in the dashboard UI.
   - Returns: A list of call history records.
 
 - **POST /config:**
+
   - Purpose: Allows dynamic updating of configuration settings (e.g., LLM biases, debate rounds) using custom presets.
   - Returns: Confirmation of updated settings.
 

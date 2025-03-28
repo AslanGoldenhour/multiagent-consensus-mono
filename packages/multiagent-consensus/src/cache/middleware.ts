@@ -3,7 +3,7 @@
  */
 import type { LanguageModelV1Middleware } from 'ai';
 import { generateCacheKey } from './utils';
-import { CacheAdapter, CacheConfig } from './types';
+import { CacheConfig } from './types';
 import { getCacheAdapter } from './adapters/factory';
 
 /**
@@ -43,6 +43,11 @@ export function createCachingMiddleware(config: CacheConfig): LanguageModelV1Mid
     timeSaved: 0,
   };
 
+  // Initialize timing averages with reasonable defaults
+  let avgGenerateTime = 500; // Initial estimate in ms
+  let avgStreamTime = 1000; // Initial estimate in ms
+  const alpha = 0.2; // Weight for new measurements (exponential moving average)
+
   return {
     /**
      * Middleware for non-streaming completions.
@@ -57,16 +62,20 @@ export function createCachingMiddleware(config: CacheConfig): LanguageModelV1Mid
         const cachedResponse = await adapter.get(cacheKey);
 
         if (cachedResponse) {
-          // Cache hit
+          // Cache hit - use current average as the estimated time saved
           telemetry.hits += 1;
-          telemetry.timeSaved += 500; // Estimate time saved
+          telemetry.timeSaved += avgGenerateTime;
           return cachedResponse;
         }
 
-        // Cache miss - generate response
+        // Cache miss - generate response and measure time
         telemetry.misses += 1;
         const startTime = Date.now();
         const response = await doGenerate();
+        const actualTime = Date.now() - startTime;
+
+        // Update rolling average with new measurement
+        avgGenerateTime = alpha * actualTime + (1 - alpha) * avgGenerateTime;
 
         // Store in cache with configured TTL
         await adapter.set(cacheKey, response, config.ttl);
@@ -74,6 +83,7 @@ export function createCachingMiddleware(config: CacheConfig): LanguageModelV1Mid
         return response;
       } catch (error) {
         // If caching fails for any reason, fall back to direct generation
+        // eslint-disable-next-line no-console
         console.warn('Caching middleware encountered an error:', error);
         return doGenerate();
       }
@@ -91,15 +101,20 @@ export function createCachingMiddleware(config: CacheConfig): LanguageModelV1Mid
         const cachedResponse = await adapter.get(cacheKey);
 
         if (cachedResponse) {
-          // Cache hit
+          // Cache hit - use current average as the estimated time saved
           telemetry.hits += 1;
-          telemetry.timeSaved += 1000; // Streaming typically takes longer
+          telemetry.timeSaved += avgStreamTime;
           return cachedResponse;
         }
 
-        // Cache miss - generate streaming response
+        // Cache miss - generate streaming response and measure time
         telemetry.misses += 1;
+        const startTime = Date.now();
         const response = await doStream();
+        const actualTime = Date.now() - startTime;
+
+        // Update rolling average with new measurement
+        avgStreamTime = alpha * actualTime + (1 - alpha) * avgStreamTime;
 
         // For streaming, we store the stream controller in the cache
         await adapter.set(cacheKey, response, config.ttl);
@@ -107,6 +122,7 @@ export function createCachingMiddleware(config: CacheConfig): LanguageModelV1Mid
         return response;
       } catch (error) {
         // If caching fails for any reason, fall back to direct streaming
+        // eslint-disable-next-line no-console
         console.warn('Caching middleware encountered an error:', error);
         return doStream();
       }
