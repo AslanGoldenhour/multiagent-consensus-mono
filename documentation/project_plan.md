@@ -29,7 +29,7 @@ This document provides a comprehensive phased implementation plan for the multia
 - [x] Fix build process to properly generate dist directory
 - [x] Update tsconfig.json for proper CommonJS module support
 - [ ] Implement proper error handling and validation
-- [ ] Publish initial version of the package to npm
+- [x] Publish initial version of the package to npm
 - [ ] Implement logging and debugging tools
 - [ ] Add support for streaming responses
 - [ ] Create bias presets for LLM models
