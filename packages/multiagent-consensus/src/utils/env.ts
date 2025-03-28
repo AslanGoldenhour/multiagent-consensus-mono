@@ -28,9 +28,10 @@ export class EnvManager {
   /**
    * Initialize environment variables from .env file
    * @param customPath Optional custom path to .env file
+   * @param force Force reinitialization even if already initialized
    */
-  public init(customPath?: string): void {
-    if (this.initialized) {
+  public init(customPath?: string, force: boolean = false): void {
+    if (this.initialized && !force) {
       return;
     }
 
@@ -38,34 +39,71 @@ export class EnvManager {
       // If custom path is provided, check if file exists
       if (customPath) {
         if (fs.existsSync(customPath)) {
-          dotenv.config({ path: customPath });
+          dotenv.config({ path: customPath, override: true });
           this.initialized = true;
           return;
         } else {
-          // eslint-disable-next-line no-console
           console.warn(`Env file not found at custom path: ${customPath}`);
         }
       }
 
       // Try loading from common locations
       // Support both .env and .env.local files in various locations
-      const envFileNames = ['.env', '.env.local'];
+      const envFileNames = ['.env.local', '.env.development', '.env', '.env.production'];
+
+      // Determine project root - consider both package directory and monorepo root
+      const currentDir = process.cwd();
+
+      // Find monorepo root by looking for package.json with workspaces
+      let monoRepoRoot = currentDir;
+      let depth = 0;
+      const maxDepth = 5; // Prevent infinite loops
+
+      while (depth < maxDepth) {
+        const packageJsonPath = path.join(monoRepoRoot, 'package.json');
+        if (fs.existsSync(packageJsonPath)) {
+          try {
+            const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+            if (packageJson.workspaces) {
+              // Found a package.json with workspaces - likely the monorepo root
+              break;
+            }
+          } catch (e) {
+            // Ignore JSON parse errors
+          }
+        }
+
+        const parentDir = path.dirname(monoRepoRoot);
+        if (parentDir === monoRepoRoot) {
+          // Reached filesystem root without finding monorepo root
+          monoRepoRoot = currentDir; // Fallback to current directory
+          break;
+        }
+
+        monoRepoRoot = parentDir;
+        depth++;
+      }
+
       const locations = [
         // Current directory
-        process.cwd(),
-        // Parent directory
-        path.resolve(process.cwd(), '..'),
-        // Project root (2 levels up in case we're in a nested package)
-        path.resolve(process.cwd(), '../..'),
-        // Package directory itself
+        currentDir,
+        // Monorepo root (detected)
+        monoRepoRoot,
+        // Package directory
         __dirname,
         path.resolve(__dirname, '..'),
         path.resolve(__dirname, '../..'),
+        // Other common locations
+        path.resolve(currentDir, '..'),
+        path.resolve(currentDir, '../..'),
       ];
+
+      // Remove duplicates from locations
+      const uniqueLocations = [...new Set(locations)];
 
       // Create all possible env file paths
       const envPaths: string[] = [];
-      locations.forEach(location => {
+      uniqueLocations.forEach(location => {
         envFileNames.forEach(fileName => {
           envPaths.push(path.resolve(location, fileName));
         });
@@ -74,20 +112,17 @@ export class EnvManager {
       // Try to load from each path
       for (const envPath of envPaths) {
         if (fs.existsSync(envPath)) {
-          dotenv.config({ path: envPath });
-          this.initialized = true;
-          // eslint-disable-next-line no-console
+          dotenv.config({ path: envPath, override: true });
           console.log(`Loaded environment variables from ${envPath}`);
+          this.initialized = true;
           return;
         }
       }
 
       // If we get here, no .env file was found
-      // eslint-disable-next-line no-console
       console.warn('No .env file found. Using existing environment variables.');
       this.initialized = true;
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error('Error loading environment variables:', error);
       // Set initialized to true to prevent further attempts
       this.initialized = true;

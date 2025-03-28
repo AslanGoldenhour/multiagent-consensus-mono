@@ -117,14 +117,7 @@ const PROVIDER_PACKAGES: Record<string, ProviderConfig> = {
   },
   '@ai-sdk/xai': {
     name: 'xai',
-    models: [
-      'grok-1',
-      'grok-1-vision',
-      'grok-beta',
-      'grok-vision-beta',
-      'grok-2-1212',
-      'grok-2-vision-1212',
-    ],
+    models: ['grok-beta', 'grok-vision-beta', 'grok-2-1212', 'grok-2-vision-1212'],
   },
   '@ai-sdk/togetherai': {
     name: 'togetherai',

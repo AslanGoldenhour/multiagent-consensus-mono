@@ -1,8 +1,8 @@
 # Multiagent Consensus
 
-[![Test Coverage](https://img.shields.io/static/v1?label=coverage&message=83.7%25&color=yellow&t=1743192965602)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
-[![Lines of Code](https://img.shields.io/static/v1?label=lines%20of%20code&message=6.2k&color=blue&t=1743192965602)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
-[![Tests](https://img.shields.io/static/v1?label=tests&message=120%20passed&color=brightgreen&t=1743192965602)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Test Coverage](https://img.shields.io/static/v1?label=coverage&message=84.2%25&color=yellow&t=1743200501202)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Lines of Code](https://img.shields.io/static/v1?label=lines%20of%20code&message=6.0k&color=blue&t=1743200501202)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Tests](https://img.shields.io/static/v1?label=tests&message=120%20passed&color=brightgreen&t=1743200501202)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
 
 [![npm version](https://img.shields.io/npm/v/multiagent-consensus.svg)](https://www.npmjs.com/package/multiagent-consensus)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -234,21 +234,21 @@ The build step is crucial as it compiles the TypeScript source files into JavaSc
 
 ## 📊 Code Metrics
 
-- **Total**: 5638 lines
+- **Total**: 5460 lines
 
 ### By Language
 
 | Language | Lines |
 | -------- | ----- |
-| ts       | 4,464 |
-| js       | 1,174 |
+| ts       | 4,525 |
+| js       | 935   |
 
 ### By Category
 
 | Category | Lines |
 | -------- | ----- |
-| core     | 4,323 |
-| examples | 1,150 |
+| core     | 4,384 |
+| examples | 911   |
 | tests    | 141   |
 | configs  | 13    |
 | other    | 11    |

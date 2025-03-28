@@ -32,6 +32,7 @@ describe('EnvManager', () => {
     fs.readFileSync = jest.fn();
     console.warn = jest.fn();
     console.error = jest.fn();
+    console.log = jest.fn();
 
     // Default mock behavior
     (fs.existsSync as jest.Mock).mockReturnValue(false);
@@ -41,8 +42,13 @@ describe('EnvManager', () => {
     jest.clearAllMocks();
 
     // Mock path.resolve to return predictable paths
-    (path.resolve as jest.Mock).mockImplementation((dir, file) => {
-      return `${dir}/${file}`;
+    (path.resolve as jest.Mock).mockImplementation((dir, ...parts) => {
+      return [dir, ...parts].join('/');
+    });
+
+    // Mock path.join for consistent behavior
+    (path.join as jest.Mock).mockImplementation((...parts) => {
+      return parts.join('/');
     });
   });
 
@@ -63,9 +69,11 @@ describe('EnvManager', () => {
     it('should initialize only once', () => {
       // Setup
       (fs.existsSync as jest.Mock).mockImplementation((path: string) => {
-        if (path === '.env') return true;
+        if (path.endsWith('.env')) return true;
         return false;
       });
+
+      (dotenv.config as jest.Mock).mockReturnValue({ parsed: { TEST_VAR: 'test_value' } });
 
       // Spy on the init method
       const initSpy = jest.spyOn(envManager, 'init');
@@ -83,11 +91,38 @@ describe('EnvManager', () => {
       expect(fs.existsSync).toHaveBeenCalled();
     });
 
+    it('should force reinitialization when force=true is passed', () => {
+      // Setup - mock an env file that exists
+      (fs.existsSync as jest.Mock).mockImplementation((path: string) => {
+        return path.endsWith('.env');
+      });
+
+      (dotenv.config as jest.Mock).mockReturnValue({ parsed: { TEST_VAR: 'test_value' } });
+
+      // First initialization
+      envManager.init();
+      expect(dotenv.config).toHaveBeenCalledTimes(1);
+
+      // Reset mocks to check second initialization
+      jest.clearAllMocks();
+
+      // Second initialization without force - should not reinitialize
+      envManager.init();
+      expect(dotenv.config).not.toHaveBeenCalled();
+
+      // Reset mocks again
+      jest.clearAllMocks();
+
+      // Third initialization with force=true - should reinitialize
+      envManager.init(undefined, true);
+      expect(dotenv.config).toHaveBeenCalledTimes(1);
+    });
+
     it('should load from custom path if provided and file exists', () => {
       (fs.existsSync as jest.Mock).mockReturnValue(true);
       envManager.init('/custom/path/.env');
       expect(fs.existsSync).toHaveBeenCalledWith('/custom/path/.env');
-      expect(dotenv.config).toHaveBeenCalledWith({ path: '/custom/path/.env' });
+      expect(dotenv.config).toHaveBeenCalledWith({ path: '/custom/path/.env', override: true });
     });
 
     it('should warn if custom path does not exist', () => {
@@ -114,7 +149,7 @@ describe('EnvManager', () => {
       const currentDir = process.cwd();
       const envPath = `${currentDir}/.env`;
 
-      // First all paths return false, then the second one returns true
+      // First all paths return false, then the specific one returns true
       (fs.existsSync as jest.Mock).mockImplementation(path => path === envPath);
 
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
@@ -123,10 +158,36 @@ describe('EnvManager', () => {
 
       // We don't need to check every call, just verify the specific path we care about
       expect(fs.existsSync).toHaveBeenCalledWith(envPath);
-      expect(dotenv.config).toHaveBeenCalledWith({ path: envPath });
+      expect(dotenv.config).toHaveBeenCalledWith({ path: envPath, override: true });
       expect(consoleSpy).toHaveBeenCalledWith(`Loaded environment variables from ${envPath}`);
 
       consoleSpy.mockRestore();
+    });
+
+    it('should check for monorepo structure by looking for package.json with workspaces', () => {
+      // Mock the fs.readFileSync to return a package.json with workspaces
+      const mockPackageJson = JSON.stringify({
+        name: 'test-monorepo',
+        workspaces: ['packages/*'],
+      });
+
+      (fs.readFileSync as jest.Mock).mockReturnValue(mockPackageJson);
+
+      // Make package.json exist but no env files
+      (fs.existsSync as jest.Mock).mockImplementation((path: string) => {
+        if (path.endsWith('package.json')) {
+          return true;
+        }
+        // Make sure no .env files are found so we traverse up to find monorepo root
+        return false;
+      });
+
+      // Run initialization
+      envManager.init();
+
+      // Verify it checked for the package.json
+      expect(fs.existsSync).toHaveBeenCalledWith(expect.stringContaining('package.json'));
+      expect(fs.readFileSync).toHaveBeenCalled();
     });
 
     it('should warn if no .env file is found', () => {
