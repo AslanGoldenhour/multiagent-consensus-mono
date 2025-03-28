@@ -5,6 +5,10 @@ set -e
 echo "📊 Updating code metrics..."
 node scripts/measure-sloc.js
 
+# Run tests with coverage to generate coverage reports
+echo "🧪 Running tests with coverage..."
+npm test -- -- --coverage
+
 # Update README badges
 echo "🏆 Updating README badges..."
 node scripts/update-badges.js
@@ -17,9 +21,5 @@ git add README.md packages/multiagent-consensus/README.md
 echo "🔎 Running linters and formatters..."
 npx lint-staged
 
-# Run tests to ensure there are no regressions
-echo "🧪 Running tests..."
-npm test
-
-# If we got this far, everything passed
+# Don't need to run tests again since we already did with coverage
 echo "✅ Pre-commit checks passed! Proceeding with commit..." 

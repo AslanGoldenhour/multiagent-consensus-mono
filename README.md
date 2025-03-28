@@ -1,9 +1,9 @@
 # Multiagent Consensus Monorepo
 
-[![Test Coverage](https://img.shields.io/badge/coverage-0%25-red.svg)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
-[![Lines of Code](https://img.shields.io/badge/lines%2520of%2520code-4.3k-blue.svg)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
-[![Tests](https://img.shields.io/badge/tests-0%2520passed-brightgreen.svg)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
-[![Status](https://img.shields.io/badge/status-active%2520development-yellow.svg)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Test Coverage](https://img.shields.io/static/v1?label=coverage&message=92.5%25&color=brightgreen&t=1743183715026)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Lines of Code](https://img.shields.io/static/v1?label=lines%20of%20code&message=4.5k&color=blue&t=1743183715026)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Tests](https://img.shields.io/static/v1?label=tests&message=110%20passed&color=brightgreen&t=1743183715026)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Status](https://img.shields.io/static/v1?label=status&message=active%20development&color=yellow&t=1743183715026)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
 
 A comprehensive monorepo structure for developing and managing multi-agent consensus systems, with a focus on consensus mechanisms for LLMs.
 
@@ -115,14 +115,14 @@ npm run test
 
 ## 📊 Code Metrics
 
-- **Total**: 4471 lines
+- **Total**: 4517 lines
 
 ### By Language
 
 | Language | Lines |
 | -------- | ----- |
 | ts       | 3,178 |
-| js       | 1,164 |
+| js       | 1,210 |
 | tsx      | 107   |
 | css      | 22    |
 
@@ -132,7 +132,7 @@ npm run test
 | -------- | ----- |
 | core     | 3,174 |
 | examples | 776   |
-| other    | 474   |
+| other    | 520   |
 | configs  | 47    |
 
 ## 📄 License
