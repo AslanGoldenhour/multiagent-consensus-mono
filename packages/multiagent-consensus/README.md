@@ -1,5 +1,9 @@
 # Multiagent Consensus
 
+[![Test Coverage](https://img.shields.io/badge/coverage-0%25-red.svg)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Lines of Code](https://img.shields.io/badge/lines%2520of%2520code-4.3k-blue.svg)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Tests](https://img.shields.io/badge/tests-0%2520passed-brightgreen.svg)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+
 [![npm version](https://img.shields.io/npm/v/multiagent-consensus.svg)](https://www.npmjs.com/package/multiagent-consensus)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

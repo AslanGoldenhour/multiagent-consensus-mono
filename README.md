@@ -1,5 +1,10 @@
 # Multiagent Consensus Monorepo
 
+[![Test Coverage](https://img.shields.io/badge/coverage-0%25-red.svg)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Lines of Code](https://img.shields.io/badge/lines%2520of%2520code-4.3k-blue.svg)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Tests](https://img.shields.io/badge/tests-0%2520passed-brightgreen.svg)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+[![Status](https://img.shields.io/badge/status-active%2520development-yellow.svg)](https://github.com/AslanGoldenhour/multiagent-consensus-mono)
+
 A comprehensive monorepo structure for developing and managing multi-agent consensus systems, with a focus on consensus mechanisms for LLMs.
 
 ## 📋 Overview
@@ -110,14 +115,14 @@ npm run test
 
 ## 📊 Code Metrics
 
-- **Total**: 4326 lines
+- **Total**: 4469 lines
 
 ### By Language
 
 | Language | Lines |
 | -------- | ----- |
 | ts       | 3,178 |
-| js       | 1,019 |
+| js       | 1,162 |
 | tsx      | 107   |
 | css      | 22    |
 
@@ -127,7 +132,7 @@ npm run test
 | -------- | ----- |
 | core     | 3,174 |
 | examples | 776   |
-| other    | 329   |
+| other    | 472   |
 | configs  | 47    |
 
 ## 📄 License
