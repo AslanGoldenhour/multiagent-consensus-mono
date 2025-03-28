@@ -151,7 +151,8 @@ The caching implementation includes the following components:
 
 - **Cache Adapters**: Provides an abstract interface for different storage backends
   - `MemoryCacheAdapter`: In-memory storage for development and single-instance applications
-  - Additional adapters (File, Redis) planned for future implementation
+  - `RedisCacheAdapter`: Upstash Redis integration for distributed production environments
+  - Additional adapters (File) planned for future implementation
 - **Cache Key Generation**: Creates deterministic keys from request parameters
 
   - Sorts object properties for consistent serialization
@@ -170,6 +171,7 @@ The caching implementation includes the following components:
   - Environment variable support (`ENABLE_CACHE`, `CACHE_ADAPTER`, `CACHE_TTL_SECONDS`)
   - Programmatic configuration via ConsensusEngine constructor
   - Support for adapter-specific options
+  - Redis integration with Upstash (`REDIS_URL`, `REDIS_TOKEN`, `REDIS_PREFIX`)
 
 - **Integration with ConsensusEngine**:
   - Automatic middleware initialization
@@ -202,6 +204,7 @@ The caching implementation includes the following components:
 - [x] Document environment variable structure in READMEs
 - [x] Create example environment files for reference
 - [x] Implement caching mechanisms for responses
+- [x] Add Redis adapter for distributed caching in production environments
 
 ### In Progress
 
@@ -251,6 +254,7 @@ The caching implementation includes the following components:
 | 2025-03-28                | Feature Branch Creation       | Created feature/implement-caching branch to implement response caching with the Vercel AI SDK                                             |
 | 2025-03-28                | Caching Implementation        | Implemented flexible caching system with memory adapter, middleware integration, and cache key generation utilities                       |
 | 2025-03-28 08:16:24 -0500 | Caching Improvements          | Enhanced caching middleware to measure actual API response times for accurate performance metrics and code cleanup                        |
+| 2025-03-28 08:25:58 -0500 | Redis Adapter Implementation  | Added Upstash Redis cache adapter for distributed caching in production environments                                                      |
 
 ## Future Considerations
 
