@@ -1,6 +1,14 @@
 #!/bin/sh
 set -e
 
+# Update code metrics
+echo "📊 Updating code metrics..."
+node scripts/measure-sloc.js
+
+# Stage the updated README files
+echo "📝 Staging updated README files..."
+git add README.md packages/multiagent-consensus/README.md
+
 # Run lint-staged to format and lint code
 echo "🔎 Running linters and formatters..."
 npx lint-staged
@@ -8,10 +16,6 @@ npx lint-staged
 # Run tests to ensure there are no regressions
 echo "🧪 Running tests..."
 npm test
-
-# Update code metrics
-echo "📊 Updating code metrics..."
-node scripts/measure-sloc.js
 
 # If we got this far, everything passed
 echo "✅ Pre-commit checks passed! Proceeding with commit..." 
