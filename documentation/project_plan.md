@@ -33,8 +33,8 @@ This document provides a comprehensive phased implementation plan for the multia
   - [x] File Cache Adapter
 - [x] Create comprehensive test suite
 - [ ] Implement Inngest for durable execution
-- [ ] Add support for streaming responses
 - [ ] Implement multi-round debate mode
+- [ ] Add support for streaming responses
 - [ ] Implement logging and debugging tools
   - [ ] Clean up existing console.log|warn|error|info statements
 - [ ] Add support for confidence scores
