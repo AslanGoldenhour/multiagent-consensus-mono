@@ -10,8 +10,8 @@
 const path = require('path');
 const fs = require('fs');
 const { Redis } = require('@upstash/redis');
-const { RedisCacheAdapter } = require('../dist/cache/adapters/redis');
-const { generateCacheKey } = require('../dist/cache/utils');
+const { RedisCacheAdapter } = require('../../../dist/cache/adapters/redis');
+const { generateCacheKey } = require('../../../dist/cache/utils');
 
 // Get the monorepo root directory
 const monorepoRoot = path.resolve(__dirname, '../../../');

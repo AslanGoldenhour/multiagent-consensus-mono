@@ -3,7 +3,7 @@
  */
 
 // Import cache adapter
-const { MemoryCacheAdapter } = require('../dist/cache/adapters');
+const { MemoryCacheAdapter } = require('../../../dist/cache/adapters');
 
 // Create a simple cache
 const cache = new MemoryCacheAdapter();

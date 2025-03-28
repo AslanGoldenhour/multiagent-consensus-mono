@@ -6,8 +6,8 @@
 
 // Import required modules
 require('dotenv').config();
-const { MemoryCacheAdapter } = require('../dist/cache/adapters');
-const { generateCacheKey } = require('../dist/cache/utils');
+const { MemoryCacheAdapter } = require('../../../dist/cache/adapters');
+const { generateCacheKey } = require('../../../dist/cache/utils');
 
 // Create a logging memory adapter
 class LoggingMemoryAdapter extends MemoryCacheAdapter {

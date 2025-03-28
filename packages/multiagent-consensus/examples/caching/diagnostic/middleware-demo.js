@@ -4,8 +4,8 @@
  */
 
 // Import middleware creator
-const { createCachingMiddleware } = require('../dist/cache/middleware');
-const { MemoryCacheAdapter } = require('../dist/cache/adapters');
+const { createCachingMiddleware } = require('../../../dist/cache/middleware');
+const { MemoryCacheAdapter } = require('../../../dist/cache/adapters');
 
 // Create a cache adapter with logging
 class LoggingMemoryAdapter extends MemoryCacheAdapter {

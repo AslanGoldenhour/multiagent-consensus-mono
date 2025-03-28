@@ -5,8 +5,8 @@
 
 // For CommonJS
 require('dotenv').config();
-const { ConsensusEngine } = require('../dist');
-const { MemoryCacheAdapter } = require('../dist/cache/adapters');
+const { ConsensusEngine } = require('../../../dist');
+const { MemoryCacheAdapter } = require('../../../dist/cache/adapters');
 
 // Create a special adapter with logging
 class LoggingMemoryAdapter extends MemoryCacheAdapter {
