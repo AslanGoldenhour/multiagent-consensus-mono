@@ -27,15 +27,15 @@ This document defines how Claude should interact with, maintain, and leverage th
 
 3. **Memory Updating Protocol**
    - Update agent_memory.md at the end of each productive session
-   - ALWAYS use the terminal command `date +"%Y-%m-%d %H:%M:%S"` to get the current date and time before adding new entries
-   - Use the accurate date from the terminal command for all new session entries
-   - Format the Session Log as a table with columns for Date, Changes, and Details
+   - ALWAYS use the terminal command `date +"%Y-%m-%d %H:%M:%S %z"` to get the current date and time before adding new entries
+   - Use the accurate date and time from the terminal command for all new session entries
+   - Format the Session Log as a table with columns for Date & Time, Changes, and Details
    - NEVER delete or overwrite previous session entries - all history must be preserved indefinitely
    - After completing any implementation checklist item, record it in the Progress Snapshot
    - Document any new technical decisions in the appropriate Technical Memory section
    - Add a new entry to the Session Log with a summary of accomplishments
    - Record any deviations from the standards defined in the Cursor rules
-   - When updating the Session Log, create a new table row with today's date and detailed changes
+   - When updating the Session Log, create a new table row with today's date & time, and detailed changes
    - Include links to relevant commits or PRs in the session log when available
 
 4. **Memory Conflict Resolution**

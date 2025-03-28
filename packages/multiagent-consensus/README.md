@@ -135,15 +135,25 @@ For using this package with LLM providers, you'll need to set up environment var
 ```
 OPENAI_API_KEY=your_openai_key_here
 ANTHROPIC_API_KEY=your_anthropic_key_here
-COHERE_API_KEY=your_cohere_key_here
+# Add other provider keys as needed
 ```
 
-We recommend using dotenv for local development:
+We recommend using dotenv for local development. First, create a `.env` file in your project root:
+
+```bash
+# Copy the example env file from the examples directory
+cp node_modules/multiagent-consensus/examples/.env.example .env
+# Then edit the .env file with your actual API keys
+```
+
+Then in your application:
 
 ```typescript
 // In your application's entry point
 import 'dotenv/config';
 ```
+
+The package supports many providers through the Vercel AI SDK. See the `.env.example` file in the examples directory for all supported environment variables.
 
 ## Examples
 

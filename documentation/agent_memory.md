@@ -95,7 +95,7 @@ We've implemented a comprehensive error handling and validation system for the p
 
 ### Environment Variable Management
 
-We've implemented a robust environment variable management system using dotenv:
+We've implemented a robust environment variable management system using a structured approach:
 
 - **EnvManager Singleton**: Provides a centralized place for accessing environment variables
 - **Custom Path Support**: Allows loading from a specified .env file path
@@ -104,6 +104,22 @@ We've implemented a robust environment variable management system using dotenv:
 - **Required Variables**: Special handling for required environment variables
 - **Provider API Key Management**: Specialized support for managing provider API keys with appropriate error handling
 - **Initialization Handling**: Designed to initialize only once and handle initialization errors gracefully
+
+#### Environment Files Structure
+
+We use a tiered approach to environment variables:
+
+- **`.env`**: Base variables shared across all environments (committed to repo)
+- **`.env.development`**: Development-specific settings (committed to repo)
+- **`.env.production`**: Production-specific settings (committed to repo)
+- **`.env.local`**: Private API keys and secrets (never committed, added to .gitignore)
+- **`packages/multiagent-consensus/examples/.env.example`**: Example file showing package configuration options
+
+This structure provides clear separation between:
+
+- Public configuration (safe to commit)
+- Environment-specific settings (safe to commit)
+- Private secrets (never committed)
 
 ### Provider System Enhancements
 
@@ -149,10 +165,15 @@ We've implemented a comprehensive testing strategy:
 - [x] Implement error handling and validation
 - [x] Set up dotenv for secure environment variable handling
 - [x] Create comprehensive test suite
+- [x] Implement structured approach to environment variables (.env, .env.development, .env.production, .env.local)
+- [x] Configure .gitignore to ensure sensitive data isn't committed
+- [x] Document environment variable structure in READMEs
+- [x] Create example environment files for reference
 
 ### In Progress
 
 - [ ] Implement example web application with UI
+- [ ] Implement caching mechanisms for responses
 
 ### Planned
 
@@ -162,7 +183,6 @@ We've implemented a comprehensive testing strategy:
 - [ ] Implement debate mode with multi-round discussion
 - [ ] Create visualization tools for consensus process
 - [ ] Add support for confidence scores
-- [ ] Implement caching mechanism for responses
 - [ ] Create dashboard for monitoring consensus process
 
 ## Session Log
@@ -195,6 +215,7 @@ We've implemented a comprehensive testing strategy:
 | 2025-03-27 | Validation System             | Created robust validation utilities to ensure data integrity throughout the application                                                   |
 | 2025-03-27 | Test Infrastructure           | Implemented comprehensive test suite with 100% coverage for utility modules and provider functionality                                    |
 | 2025-03-27 | Testing Strategy Update       | Adopted a more pragmatic testing approach for provider tests, focusing on observable behavior rather than internal implementation details |
+| 2025-03-28 | Environment Structure         | Implemented a structured approach to environment variables with layered .env files and better secret management                           |
 
 ## Future Considerations
 

@@ -44,11 +44,29 @@ cd multiagent-consensus-mono
 npm install
 ```
 
-3. Run the development environment:
+3. Set up environment variables:
+
+```bash
+# Copy environment files for development
+cp .env.development .env
+cp .env.local.example .env.local
+# Edit .env.local to add your private API keys
+```
+
+4. Run the development environment:
 
 ```bash
 npm run dev
 ```
+
+### Environment Structure
+
+This project uses a structured approach to environment variables:
+
+- `.env` - Base variables used across all environments (safe to commit)
+- `.env.development` - Development-specific variables (safe to commit)
+- `.env.production` - Production-specific variables (safe to commit)
+- `.env.local` - Private variables like API keys (never commit these)
 
 ## 📦 Packages
 
